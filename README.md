@@ -1,8 +1,8 @@
 [![codecov](https://codecov.io/gh/center-for-threat-informed-defense/project-template/branch/main/graph/badge.svg?token=ygDiymg8y3)](https://codecov.io/gh/center-for-threat-informed-defense/project-template)
 TODO: Replace with project-specific CodeCov badge
 
-# TODO: Replace with Project Name
-TODO: Replace with project description
+# Cloud Analytics
+Cloud Analytics helps defenders detect attacks to their cloud infrastructure by developing behavioral analytics to detect attacks to cloud platforms and a blueprint for how others can create and use cloud analytics effectively.
 
 ## Questions and Feedback
 Please submit issues for any technical questions/concerns or contact ctid@mitre-engenuity.org directly for more general inquiries.
