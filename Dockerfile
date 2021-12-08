@@ -22,7 +22,7 @@ COPY requirements.txt ./
 COPY requirements ./requirements
 COPY setup.cfg setup.py ./
 COPY cloud-analytics/__init__.py ./cloud-analytics/
-RUN --mount=type=cache,target=/root/.cache && \
+RUN --mount=type=cache,target=/root/.cache \
     python -m pip install -r requirements.txt -r requirements/dev.txt && \
     python -m pip install --no-deps -e .
 
