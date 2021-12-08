@@ -2,7 +2,7 @@
 # See `make help` for a list of all available commands.
 #
 
-APP_NAME := cloud-analytics
+APP_NAME := cloud_analytics
 VENV := .venv
 PY_VERSION := python3.8
 TIMESTAMP := $(shell date -u +"%Y%m%d_%H%M%S")
@@ -20,18 +20,19 @@ $(VENV): $(VENV)/bin/activate
 venv: $(VENV)  ## build python venv
 
 $(VENV)/bin/activate:
-	$(PY_VERSION) -m venv --prompt $(VENV) $(VENV)
+	$(PY_VERSION) -m venv --prompt $(APP_NAME) $(VENV)
 
 .PHONY: install
-install: venv  # Install Python dependencies
+install: venv  upgrade-pip ## Install Python dependencies
 	./$(VENV)/bin/python -m pip install -r requirements.txt
 	./$(VENV)/bin/python -m pip install -e .
 
 .PHONY: install-dev
-install-dev: venv  # Install Python dependencies
+install-dev: venv upgrade-pip  ## Install Python dependencies and dev dependencies
 	./$(VENV)/bin/python -m pip install -r requirements/dev.txt
 	./$(VENV)/bin/python -m pip install -e .
 
+.PHONY: upgrade-pip
 upgrade-pip: venv  ## Upgrade pip and related
 	./$(VENV)/bin/python -m pip install --upgrade pip wheel setuptools pip-tools
 
@@ -52,3 +53,10 @@ pre-commit-run-all: venv ## Run pre-commit manually on all files
 .PHONY: build-container
 build-container: venv ## Build container image
 	docker build -t $(APP_NAME):dev -t $(APP_NAME):
+
+clean: ## Clean up pycache files
+	find . -name '*.pyc' -delete
+	find . -name '__pycache__' -type d -delete
+
+clean-all: clean ## Clean up venv and tox if necessary, in addition to standard clean
+	rm -rf *.egg *.egg-info/ .venv/ .tox/

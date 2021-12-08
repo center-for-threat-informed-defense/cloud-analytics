@@ -1,6 +1,6 @@
 import pytest
 
-import check_palindrome
+from cloud_analytics import check_palindrome
 
 
 @pytest.mark.parametrize('text,result', [

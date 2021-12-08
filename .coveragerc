@@ -3,7 +3,7 @@
 [run]
 branch = True
 source =
-    src/
+    cloud_analytics/
 omit =
     */tests/*.py
 
