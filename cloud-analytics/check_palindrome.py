@@ -10,10 +10,10 @@ def is_palindrome(text):
     return text == text[::-1]
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Takes an input string and determines if its a palindrome')
-    parser.add_argument('text', help='The text to test for palindromicity')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Takes an input string and determines if its a palindrome")
+    parser.add_argument("text", help="The text to test for palindromicity")
     args = parser.parse_args()
-    print(f'Testing {args.text} for palindromicity...')
+    print(f"Testing {args.text} for palindromicity...")
     is_palindrome = is_palindrome(args.text)
-    print(f'Is palindrome: {is_palindrome}.')
+    print(f"Is palindrome: {is_palindrome}.")
