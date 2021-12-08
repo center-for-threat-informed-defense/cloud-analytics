@@ -3,12 +3,9 @@ import pytest
 from cloud_analytics import check_palindrome
 
 
-@pytest.mark.parametrize('text,result', [
-    ('', True),
-    ('a', True),
-    ('ab', False),
-    ('a man a plan a canal panama', False)
-])
+@pytest.mark.parametrize(
+    "text,result", [("", True), ("a", True), ("ab", False), ("a man a plan a canal panama", False)]
+)
 def test_is_palindrome_returns_correct_value(text, result):
     # Act
     is_palindrome = check_palindrome.is_palindrome(text)
