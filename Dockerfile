@@ -1,11 +1,12 @@
 # syntax=docker/dockerfile:1
 
+# Build Python base image
+FROM python:3.8-bullseye as python
+
 # OCI labels
 LABEL "org.opencontainers.image.title"="Cloud Analytics"
 LABEL "org.opencontainers.image.url"="https://ctid.mitre-engenuity.org/"
 
-# Build Python base image
-FROM python:3.8-bullseye as python
 RUN mkdir /app && \
     python -m venv /app/.venv && \
     /app/.venv/bin/python -m pip install -U pip wheel setuptools

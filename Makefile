@@ -52,7 +52,7 @@ pre-commit-run-all: venv ## Run pre-commit manually on all files
 
 .PHONY: build-container
 build-container: venv ## Build container image
-	docker build -t $(APP_NAME):dev -t $(APP_NAME):
+	docker build -t $(APP_NAME):dev -t $(APP_NAME):$(TIMESTAMP)_$(GIT_HASH) -f Dockerfile .
 
 clean: ## Clean up pycache files
 	find . -name '*.pyc' -delete
