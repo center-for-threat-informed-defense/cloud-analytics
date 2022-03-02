@@ -57,3 +57,20 @@ variable "retention_policy" {
   })
   default = null
 }
+
+variable "repository_name" {
+  description = "Name of Artifact registry repository."
+  default     = "ca-repo"
+}
+
+variable "default_tags" {
+  type = map(string)
+  default = {
+    env : "cloud-analytics-test"
+  }
+}
+
+variable "replica_region" {
+  description = "Region to use for replicas"
+  default     = "us-central1"
+}
