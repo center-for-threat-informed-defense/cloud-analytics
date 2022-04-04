@@ -1,6 +1,6 @@
 # AEP 1
 
-Adversary Emulation Plan 1.
+Adversary Emulation Plan 1 scenario demonstrates an adversary with a goal of attacking improperly configured containerization solutions to mine cryptocurrency.
 
 ## Docs
 
