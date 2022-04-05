@@ -51,3 +51,9 @@ variable "admin_password" {
   description = "The admin password for the VMs"
   default     = "Pa$$w0rd1234"
 }
+
+variable "system_node_count" {
+  type        = number
+  description = "Number of AKS worker nodes"
+  default     = 1
+}
