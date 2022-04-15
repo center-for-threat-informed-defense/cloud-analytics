@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">=2.0.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.0"
+    }
   }
 }
 
@@ -14,6 +18,10 @@ locals {
     "name"        = var.name
   }
 
+}
+
+resource "random_id" "id-random" {
+  byte_length = 3
 }
 
 # Reference to the current subscription.  Used when creating role assignments
@@ -29,7 +37,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_key_vault" "azvault" {
-  name                        = "${var.prefix}-keyvault-test1"
+  name                        = "${var.prefix}-keyvault-test${random_id.id-random.dec}"
   location                    = azurerm_resource_group.default.location
   resource_group_name         = azurerm_resource_group.default.name
   enabled_for_disk_encryption = true
