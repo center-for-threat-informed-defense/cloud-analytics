@@ -1,4 +1,7 @@
 # aep1.yaml - CALDERA and Atomic style TTPs for Cloud Analytics project
+# prior to execution, user must run the following at Azure CLI to generate service principal for automated usage
+# az ad sp create-for-rbac # (or powershell equivalent)
+# install ms cli from: https://aka.ms/installazurecliwindows
 
 - emulation_plan_details:
     id: ffe6f601-5c08-401b-8f80-417a1be8bd97
@@ -6,6 +9,40 @@
     adversary_description: Adversary CAP, or Cloud Analytics Project, is a simulated adversary created to meet the goals of the MITRE Engenuity Cloud Analytics Project. Adversary behavior was based off of TeamTNT, and augmented with additional TTPs to provide a cloud specific advesary. Requires Azure CLI installation.
     attack_version: 10.0
     format_version: 1.0
+
+- id: e44a39ce-0651-4ddd-8f05-f83aa2ffd657
+  name: Initial Access Login to Cloud
+  description: Authenticate service principal for automation
+  tactic: initial-access
+  technique:
+    attack_id: T1078.004
+    name: "Valid Accounts"
+  procedure_group: procedure_initial
+  procedure_step: "1.A"
+  platforms:
+    windows:
+      psh,pwsh:
+        command: |
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}"
+
+  input_arguments:
+    identity.app.id:
+      description: ID of Service principal generated for CLI usage
+      type: string
+      default: unknown
+    identity.app.pw:
+      description: Password returned by service principal creation
+      type: string
+      default: unknown
+    identity.tenant:
+      description: ID of tenant service principal is assigned to
+      type: string
+      default: unknown
+
+  executors:
+    - name: powershell
+      command: |
+        az login --service-principal -u #{identity.app.id} -p #{identity.app.pw} --tenant #{identity.tenant}
 
 - id: e6a0bc92-f775-4797-9ea6-554e391c1eba
   name: Initial Access External Remote Services
@@ -16,7 +53,7 @@
     name: "External Remote Services"
   cti_source: "https://attack.mitre.org/techniques/T1610/"
   procedure_group: procedure_initial
-  procedure_step: "1.A"
+  procedure_step: "1.B"
   platforms:
     windows:
       psh,pwsh:
@@ -109,7 +146,6 @@
       description: Tag name to use for container when imported
       type: string
       default: latest
-
 
   executors:
   - name: powershell
@@ -266,9 +302,23 @@
     windows:
       cmd:
         command: |
-          az container attach --name publicapp --resource-group ca-sandbox
+          az container attach --name publicapp --resource-group #{cloud.resource.group}
+
+  input_arguments:
+    cloud.resource.group:
+      description: Name of resource group
+      type: string
+      default: casandbox
+    cloud.location:
+      description: Azure location
+      type: string
+      default: eastus
+    container.name_b:
+      description: Container to attach to
+      type: string
+      default: publicapp
 
   executors:
     - name: command_prompt
       command: |
-        az container attach --name publicapp --resource-group ca-sandbox
+        az container attach --name publicapp --resource-group #{cloud.resource.group}
