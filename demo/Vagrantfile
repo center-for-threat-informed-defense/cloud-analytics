@@ -1,0 +1,8 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.provision "shell", path: "caldera.sh"
+    config.vm.box = "ubuntu/focal64"
+    config.vm.network "private_network", type: "dhcp"
+  end
