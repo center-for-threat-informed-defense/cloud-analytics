@@ -2,7 +2,12 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-    config.vm.provision "shell", path: "caldera.sh"
+    config.vm.provision "shell", path: "provision-caldera.sh", privileged: false
+    config.vm.provision "file", source: "./caldera.service", destination: "/tmp/caldera.service"
+    config.vm.provision "file", source: "./connect-caldera.sh", destination: "/home/vagrant/connect-caldera.sh"
+    config.vm.provision "shell", inline: "mv -f /tmp/caldera.service /etc/systemd/system/caldera.service"
+    config.vm.provision "shell", inline: "systemctl daemon-reload && systemctl enable --now caldera.service", privileged: true, reboot: true
+    config.vm.provision "shell", inline: "chmod +x /home/vagrant/connect-caldera.sh && /home/vagrant/connect-caldera.sh", privileged: false
     config.vm.box = "ubuntu/focal64"
     config.vm.network "private_network", type: "dhcp"
   end
