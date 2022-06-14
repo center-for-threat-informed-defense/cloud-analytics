@@ -1,0 +1,20 @@
+title: Azure Autoscaling Threshold Exceeded
+id: bebf2bb1-cdc0-4dd3-9cd9-d77fa4739cf7
+description: Identifies when the number of instances in the resource group is greater than the threshold.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+logsource:
+  product: azure
+  service: activitylogs
+detection:
+    selection:
+        properties.allowBlobPublicAccess: true
+    condition: selection
+level: medium
+tags:
+    - attack.impact
+    - attack.t1496
+falsepositives:
+    - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.
+    - Verify whether the change in resource usage is triggered by valid and expected activity.

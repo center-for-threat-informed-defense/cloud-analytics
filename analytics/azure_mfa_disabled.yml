@@ -1,0 +1,21 @@
+title: Azure MFA Disabled
+id: b2511cbc-8a2c-4581-9371-f1f500666f13
+description: Identifies when MFA has been disabled for an Azure account.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+logsource:
+  product: azure
+  service: signinlogs
+  references:
+    - https://docs.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-configure?tabs=portal#allow-or-disallow-public-read-access-for-a-storage-account
+detection:
+    selection:
+        properties.allowBlobPublicAccess: true
+    condition: selection
+level: medium
+tags:
+    - attack.credential.access
+    - attack.t1098
+falsepositives:
+    - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.

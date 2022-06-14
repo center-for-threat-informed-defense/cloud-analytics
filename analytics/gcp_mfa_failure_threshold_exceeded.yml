@@ -1,0 +1,23 @@
+title: GCP MFA Failure Threshold Exceeded
+id: fff38193-d040-4c8c-a7a5-078bc8546422
+description: Identifies when a service principal has privileges escalated to Global Administrator.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+references:
+    - https://cloud.google.com/storage/docs/json_api/v1/buckets
+logsource:
+  product: gcp
+  service: gcp.audit
+detection:
+    selection:
+        gcp.audit.method_name:
+            - storage.buckets.list
+            - storage.buckets.listChannels
+    condition: selection
+level: low
+tags:
+    - attack.discovery
+falsepositives:
+ - Storage Buckets being enumerated may be performed by a system administrator. Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.
+ - Storage Buckets enumerated from unfamiliar users should be investigated. If known behavior is causing false positives, it can be exempted from the rule.
