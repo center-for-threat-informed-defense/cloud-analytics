@@ -1,7 +1,7 @@
 title: Workspace Login Marked Suspicious
 id: 87fb3484-0038-4ec5-93f6-af109151534e
-description: Identifies when a service principal has privileges escalated to Global Administrator.
-author: CTID MITRE, Michael Butt
+description: Identifies when a workspace login is marked suspicious
+author: CTID MITRE, Google CSA, Michael Butt
 status: experimental
 date: 2022/06/07
 references:
