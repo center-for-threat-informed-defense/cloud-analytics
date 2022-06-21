@@ -1,0 +1,14 @@
+[Unit]
+Description=Caldera Service
+After=network-online.target
+
+[Service]
+Type=simple
+Environment=PATH=/home/vagrant/appenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+User=vagrant
+Group=vagrant
+WorkingDirectory=/home/vagrant/caldera
+ExecStart=/home/vagrant/appenv/bin/python server.py --insecure -l DEBUG
+
+[Install]
+WantedBy=multi-user.target

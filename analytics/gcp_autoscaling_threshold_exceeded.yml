@@ -1,0 +1,34 @@
+title: GCP Autoscaling Threshold Exceeded
+id: fc946a0c-f32a-43ca-9e04-3755d9d00a2a
+name: gke_autoscaling_threshold_exceeded
+description: Identifies when autoscaling events have exceeded a threshold. Uses Sigma correlation rules.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+logsource:
+  product: gcp
+  service: gcp.audit
+detection:
+    selection:
+        gcp.audit.method_name:
+            - compute.autoscalers.create
+            - compute.autoscalers.delete
+            - compute.autoscalers.update
+    condition: selection
+level: low
+tags:
+    - attack.discovery
+    - attack.t1496
+falsepositives:
+ - Autoscaling events may be triggered by legitimate fluctuations application load.
+ - Filter audit methods above for more targeted detections.
+---
+action: correlation
+type: temporal
+rule: gcp_autoscaling_threshold_exceeded
+group-by:
+    - nodepool
+timespan: 1h
+ordered: false
+condition:
+    gte: 100

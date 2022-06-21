@@ -1,0 +1,24 @@
+title: Service Principal Privilege Escalation
+id: a6cca0de-5f89-4949-8a2d-20982510cf9f
+description: Identifies when a service principal has privileges escalated to Global Administrator.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+references:
+    - https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-cli
+logsource:
+  product: azure
+  service: auditlogs
+detection:
+    selection:
+        CategoryValue: 'RoleManagement'
+        ActivityDisplayName: 'Add member to role'
+        properties.TargetType: ServicePrincipal
+        ModifiedProperties{}.NewValue|contains: "Admin"
+        condition: selection
+level: medium
+tags:
+    - attack.defense_evasion
+    - attack.t1578
+falsepositives:
+    - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.

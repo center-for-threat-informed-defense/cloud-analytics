@@ -1,0 +1,24 @@
+title: Azure Storage Blob Access Modified
+id: b3ffe973-457d-4a00-bb5f-4ceb1cda5308
+name: azure_storage_mod_public
+description: Identifies when a previously existing storage container has access control modified to enable public access
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/05/17
+references:
+    - https://docs.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-configure?tabs=portal#allow-or-disallow-public-read-access-for-a-storage-account
+logsource:
+  product: azure
+  service: activitylogs
+detection:
+    selection:
+        CategoryValue: "Administrative"
+        OperationNameValue|contains: 'Microsoft.Storage/storageAccounts/write'
+        Properties|contains: 'allowBlobPublicAccess\\":true'
+    condition: selection
+level: medium
+tags:
+    - attack.defense_evasion
+    - attack.t1578
+falsepositives:
+ - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.

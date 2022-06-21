@@ -1,0 +1,21 @@
+title: Google Storage Bucket Access Modified
+id: 2c89cd0c-4260-41a6-ad5e-500e40b47c72
+description: Identifies when a previously existing storage container has access control modified to enable public access
+author: CTID Mitre
+status: experimental
+date: 2022/05/17
+references:
+    - https://cloud.google.com/storage/docs/access-control/making-data-public
+logsource:
+  product: gcp
+  service: gcp.audit
+detection:
+    selection:
+        properties.allowBlobPublicAccess: true
+    condition: selection
+level: medium
+tags:
+    - attack.defense_evasion
+    - attack.t1578
+falsepositives:
+ - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.

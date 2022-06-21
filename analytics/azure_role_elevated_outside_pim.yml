@@ -1,0 +1,23 @@
+title: Role Elevated Outside of PIM
+id: abd97f2e-bfb3-4aa5-b55e-0480c70a736e
+description: Identifies when a privileged role assignment has been made outside of the Privileged Identity Management tool.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+references:
+    - https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/pim-how-to-configure-security-alerts#roles-are-being-assigned-outside-of-privileged-identity-management
+logsource:
+  product: azure
+  service: auditlogs
+detection:
+    selection:
+        properties.operation_type: RoleElevatedOutsidePimAlert
+        properties.category: RoleManagement
+    condition: selection
+level: medium
+tags:
+    - attack.privilege_escalation
+    - attack.t1484
+falsepositives:
+    - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.
+    - Verify the privilege escalation was valid, and ensure principal of least privilege is being used.

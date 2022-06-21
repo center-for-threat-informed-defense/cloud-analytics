@@ -1,0 +1,11 @@
+action: include
+filename: azure_mfa_denies.yml
+---
+action: correlation
+name: azure_mfa_denies
+type: event_count
+group-by:
+- User
+timespan: 1h
+condition:
+    gte: 100

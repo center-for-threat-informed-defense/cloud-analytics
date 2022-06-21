@@ -1,0 +1,22 @@
+title: GCP SSH Key Added
+id: 7cb3c993-3dc3-4075-8ab9-da59e82b4db7
+description: Identifies when an SSH key is added to an instance.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+references:
+    - https://cloud.google.com/compute/docs/logging/audit-logging
+logsource:
+  product: gcp
+  service: gcp.audit
+detection:
+    selection:
+        gcp.audit.method_name:
+            - compute.instances.setMetadata
+    condition: selection
+level: medium
+tags:
+    - attack.persistence
+    - attack.t1098.001
+falsepositives:
+ - Legitimate addition of SSH key to instance in cases OS Login is not in use.

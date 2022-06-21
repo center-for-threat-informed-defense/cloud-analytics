@@ -193,4 +193,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+# vagrant
+.vagrant/
 cloud-analytics-342815-34ae468440cd.json

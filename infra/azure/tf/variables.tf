@@ -1,7 +1,7 @@
 variable "name" {
   type        = string
   description = "Location of the azure resource group."
-  default     = "cloud-analytics"
+  default     = "casandbox"
 }
 
 variable "environment" {

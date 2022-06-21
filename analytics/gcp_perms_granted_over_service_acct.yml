@@ -1,0 +1,25 @@
+title: GCP Permissions Granted Over Service Account
+id: cd3a4aaf-cd8c-4ce6-8e0d-c65efdc9c266
+description: Identifies when permissions granted to principal to impersonate or create keys for a service account.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+references:
+    - https://github.com/GoogleCloudPlatform/security-analytics#security-analytics-use-cases
+logsource:
+  product: gcp
+  service: gcp.audit
+  detection:
+    selection_methodnamestart:
+        gcp.audit.method_name|beginswith: google.iam.admin
+    selection_methodnameend:
+        gcp.audit.method_name|endswith: SetIAMPolicy
+    selection_role:
+        gcp.audit.resource|contains: "service_account"
+    condition: selection_methodnamestart and selection_methodnameend and selection_role
+level: low
+tags:
+    - attack.discovery
+falsepositives:
+ - Storage Buckets being enumerated may be performed by a system administrator. Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.
+ - Storage Buckets enumerated from unfamiliar users should be investigated. If known behavior is causing false positives, it can be exempted from the rule.
