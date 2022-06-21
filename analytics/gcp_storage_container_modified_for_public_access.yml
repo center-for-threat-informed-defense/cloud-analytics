@@ -8,7 +8,7 @@ references:
     - https://cloud.google.com/storage/docs/access-control/making-data-public
 logsource:
   product: gcp
-  service: projects/PROJECT_ID/logs/cloudaudit.googleapis.com%2Factivity
+  service: gcp.audit
 detection:
     selection:
         properties.allowBlobPublicAccess: true

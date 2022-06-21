@@ -21,6 +21,7 @@ tags:
     - attack.t1496
 falsepositives:
  - Autoscaling events may be triggered by legitimate fluctuations application load.
+ - Filter audit methods above for more targeted detections.
 ---
 action: correlation
 type: temporal
@@ -29,3 +30,5 @@ group-by:
     - nodepool
 timespan: 1h
 ordered: false
+condition:
+    gte: 100

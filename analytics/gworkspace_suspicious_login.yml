@@ -1,0 +1,26 @@
+title: Workspace Login Marked Suspicious
+id: 87fb3484-0038-4ec5-93f6-af109151534e
+description: Identifies when a service principal has privileges escalated to Global Administrator.
+author: CTID MITRE, Michael Butt
+status: experimental
+date: 2022/06/07
+references:
+    - https://github.com/GoogleCloudPlatform/security-analytics#security-analytics-use-cases
+logsource:
+  product: google_workspace
+  service: google_workspace.admin
+detection:
+    selection:
+        eventService: admin.googleapis.com
+    selection:
+        gcp.audit.method_name:
+            - google.login.LoginService.loginSuccess
+        parameter|contains:  '\"boolValue\": true'
+        parameter|contains:  '\"name\": \"is_suspicious\"'
+    condition: selection
+level: low
+tags:
+    - attack.discovery
+    - attack.t1078.004
+falsepositives:
+ - Multiple bool values in  parameter payload may trigger false positives.
