@@ -1,0 +1,15 @@
+action: include
+filename: azure_guest_user_priv_escalation.yml
+---
+action: include
+filename: azure_storage_container_modified_for_public_access.yml
+---
+action: correlation
+type: temporal
+rule:
+    - azure_guest_user_priv_esc
+    - azure_storage_mod_public
+group-by:
+    - UserName
+timespan: 30m
+ordered: true

@@ -1,21 +1,25 @@
-title: Azure MFA Disabled
-id: b2511cbc-8a2c-4581-9371-f1f500666f13
-description: Identifies when MFA has been disabled for an Azure account.
-author: CTID MITRE, Michael Butt
+title: Disabled MFA to Bypass Authentication Mechanisms
+id: 7ea78478-a4f9-42a6-9dcd-f861816122bf
+name: disable_mfa
 status: experimental
-date: 2022/06/07
+description: Detection for when multi factor authentication has been disabled, which might indicate a malicious activity to bypass authentication mechanisms.
+author: '@ionsor'
+date: 2022/02/08
+references:
+    - https://attack.mitre.org/techniques/T1556/
+    - https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-userstates
 logsource:
-  product: azure
-  service: signinlogs
-  references:
-    - https://docs.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-configure?tabs=portal#allow-or-disallow-public-read-access-for-a-storage-account
+    category: azure
+    product: azure.activitylogs
 detection:
     selection:
-        properties.allowBlobPublicAccess: true
+        eventSource: AzureActiveDirectory
+        eventName: 'Disable Strong Authentication.'
+        status: success
     condition: selection
+falsepositives:
+    - Authorized modification by administrators
 level: medium
 tags:
-    - attack.credential.access
-    - attack.t1098
-falsepositives:
-    - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.
+    - attack.persistence
+    - attack.t1556

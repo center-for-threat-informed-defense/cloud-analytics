@@ -1,5 +1,6 @@
 title: Azure Storage Blob Access Modified
 id: b3ffe973-457d-4a00-bb5f-4ceb1cda5308
+name: azure_storage_mod_public
 description: Identifies when a previously existing storage container has access control modified to enable public access
 author: CTID MITRE, Michael Butt
 status: experimental
@@ -11,7 +12,9 @@ logsource:
   service: activitylogs
 detection:
     selection:
-        properties.allowBlobPublicAccess: true
+        CategoryValue: "Administrative"
+        OperationNameValue|contains: 'Microsoft.Storage/storageAccounts/write'
+        Properties|contains: 'allowBlobPublicAccess\\":true'
     condition: selection
 level: medium
 tags:

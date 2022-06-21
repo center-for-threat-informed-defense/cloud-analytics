@@ -1,17 +1,18 @@
 title: Azure Guest User Privilege Escalation
 id: ab2a0702-9e32-400e-b410-897993bad169
+name: azure_guest_user_priv_esc
 description: Identifies when a guest user has privileges escalated to Global Administrator.
 author: CTID MITRE, Michael Butt
 status: experimental
 date: 2022/06/07
-references:
-    - https://docs.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-configure?tabs=portal#allow-or-disallow-public-read-access-for-a-storage-account
 logsource:
   product: azure
   service: activitylogs
 detection:
     selection:
-        properties.allowBlobPublicAccess: true
+        CategoryValue: 'RoleManagement'
+        OperationName: 'Add member to role'
+        ModifiedProperties{}.NewValue|contains: 'Administrator'
     condition: selection
 level: medium
 tags:
