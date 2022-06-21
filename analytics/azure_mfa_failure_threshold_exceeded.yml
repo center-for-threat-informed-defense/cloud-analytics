@@ -1,21 +1,11 @@
-title: Azure MFA Failure Threshold Exceeded
-id: 8fd07e6b-079d-466e-b059-6e8b17b3a4a2
-description: Identifies when a service principal has privileges escalated to Global Administrator.
-author: CTID MITRE, Michael Butt
-status: experimental
-date: 2022/06/07
-references:
-    - https://docs.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-configure?tabs=portal#allow-or-disallow-public-read-access-for-a-storage-account
-logsource:
-  product: azure
-  service: activitylogs
-detection:
-    selection:
-        properties.allowBlobPublicAccess: true
-    condition: selection
-level: medium
-tags:
-    - attack.defense_evasion
-    - attack.t1578
-falsepositives:
-    - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.
+action: include
+filename: azure_mfa_denies.yml
+---
+action: correlation
+name: azure_mfa_denies
+type: event_count
+group-by:
+- User
+timespan: 1h
+condition:
+    gte: 100

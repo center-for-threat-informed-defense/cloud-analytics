@@ -11,10 +11,11 @@ logsource:
   service: auditlogs
 detection:
     selection:
-        properties.Category: RoleManagement
-        properties.Role.DisplayName|contains: Administrator
+        CategoryValue: 'RoleManagement'
+        ActivityDisplayName: 'Add member to role'
         properties.TargetType: ServicePrincipal
-    condition: selection
+        ModifiedProperties{}.NewValue|contains: "Admin"
+        condition: selection
 level: medium
 tags:
     - attack.defense_evasion
