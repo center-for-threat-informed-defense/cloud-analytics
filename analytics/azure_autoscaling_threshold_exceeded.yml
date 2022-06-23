@@ -7,7 +7,7 @@ status: experimental
 date: 2022/06/07
 logsource:
   product: azure
-  service: activitylogs
+  service: azureactivity
 detection:
     selection:
         CategoryValue: 'AutoscaleScaleActions'

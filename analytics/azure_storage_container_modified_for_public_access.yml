@@ -9,7 +9,7 @@ references:
     - https://docs.microsoft.com/en-us/azure/storage/blobs/anonymous-read-access-configure?tabs=portal#allow-or-disallow-public-read-access-for-a-storage-account
 logsource:
   product: azure
-  service: activitylogs
+  service: azureactivity
 detection:
     selection:
         CategoryValue: "Administrative"
