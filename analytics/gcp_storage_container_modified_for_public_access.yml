@@ -9,13 +9,17 @@ references:
 logsource:
   product: gcp
   service: gcp.audit
+level: medium
 detection:
     selection:
-        properties.allowBlobPublicAccess: true
-    condition: selection
-level: medium
+        eventService: storage.googleapis.com
+        gcp.audit.method_name:
+            - storage.setIamPermissions
+        parameter|contains:  '\"action\": \"ADD'
+        parameter|contains:  'allUsers'
 tags:
     - attack.defense_evasion
     - attack.t1578
 falsepositives:
  - Verify whether the user identity, user agent, and/or hostname should be making changes in your environment.
+ - Verify if storage bucket was made public for legitimate purpose.

@@ -17,7 +17,7 @@ detection:
     condition: selection
 level: low
 tags:
-    - attack.discovery
+    - attack.impact
     - attack.t1496
 falsepositives:
  - Autoscaling events may be triggered by legitimate fluctuations application load.

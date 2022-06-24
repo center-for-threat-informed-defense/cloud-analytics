@@ -13,6 +13,7 @@ detection:
         CategoryValue: 'RoleManagement'
         OperationName: 'Add member to role'
         ModifiedProperties{}.NewValue|contains: 'Admin'
+        targetResources.userPrincipalName|contains: '#EXT#'
     condition: selection
 level: medium
 tags:
