@@ -2,9 +2,11 @@ title: GCP Autoscaling Threshold Exceeded
 id: fc946a0c-f32a-43ca-9e04-3755d9d00a2a
 name: gke_autoscaling_threshold_exceeded
 description: Identifies when autoscaling events have exceeded a threshold. Uses Sigma correlation rules.
-author: CTID MITRE, Michael Butt
+author: CTID MITRE, Google Cloud CSA, Michael Butt
 status: experimental
 date: 2022/06/07
+references:
+    - https://github.com/GoogleCloudPlatform/security-analytics#security-analytics-use-cases
 logsource:
   product: gcp
   service: gcp.audit
