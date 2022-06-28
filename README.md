@@ -4,7 +4,7 @@ Cloud Analytics helps defenders detect attacks to their cloud infrastructure by 
 
 ## Blueprint Document Draft
 
-A draft of the [Blueprint document is available in the repository](Draft_Analytic_Blueprint.pdf)
+A draft of the [Blueprint document is available in the repository](DRAFT_Analytics_Blueprint.pdf)
 
 ## Questions and Feedback
 
