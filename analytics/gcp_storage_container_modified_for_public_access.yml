@@ -1,7 +1,7 @@
 title: Google Storage Bucket Access Modified
 id: 2c89cd0c-4260-41a6-ad5e-500e40b47c72
 description: Identifies when a previously existing storage container has access control modified to enable public access
-author: CTID Mitre
+author: CTID Mitre, Michael Butt
 status: experimental
 date: 2022/05/17
 references:

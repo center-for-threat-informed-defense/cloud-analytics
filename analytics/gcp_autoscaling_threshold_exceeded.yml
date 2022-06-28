@@ -6,7 +6,8 @@ author: CTID MITRE, Google Cloud CSA, Michael Butt
 status: experimental
 date: 2022/06/07
 references:
-    - https://github.com/GoogleCloudPlatform/security-analytics#security-analytics-use-cases
+    - https://github.com/GoogleCloudPlatform/security-analytics/blob/main/src/4.10/4.10.md
+    - https://github.com/GoogleCloudPlatform/security-analytics/blob/main/src/4.11/4.11.md
 logsource:
   product: gcp
   service: gcp.audit
