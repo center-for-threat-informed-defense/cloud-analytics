@@ -4,15 +4,13 @@ Using the emu plugin for Caldera makes it easy, but it is not obvious at all how
 
 __NOTE__: Caldera 4.0.0-beta was used for the following instructions. Not tested on other versions.
 
-
-
 ## Setup
 
 #### Ensure EMU Plugin is Enabled
 
 Make sure the emu plugin is enabled within Caldera. If not, navigate to _Configuration_ -> _configuration_-> _Plugins_, and enable the emu plugin, and restart Caldera. When enabled, you should see `emu` on the left side menu.
 
-<img src="/Users/m3/Desktop/Screen Shot 2022-06-06 at 4.30.48 PM.png" alt="Screen Shot 2022-06-06 at 4.30.48 PM" style="zoom:30%;" />
+<img src="./img1.png" alt="Caldera EMU plugin enabled check" style="zoom:30%;" />
 
 ## Install New Advesary Emulation Plan
 
@@ -20,10 +18,10 @@ Make sure the emu plugin is enabled within Caldera. If not, navigate to _Configu
 
 1. On the command line on the Caldera system, navigate to the following directory (`CALDERA_HOME` denotes the home directory of the Caldera installation).
    1. `cd CALDERA_HOME/plugins/emu/data/adversary-emulation-plans`
-3. Copy the attached file to the Caldera system, and decompress while in the directory in the previous step.
+2. Copy the attached file to the Caldera system, and decompress while in the directory in the previous step.
    1. `tar -zxvf /path/to/aep1-package-caldera.tar.gz`
-4. The resulting directory layout should look similar to the following:
-   1. <img src="/Users/m3/Desktop/Screen%20Shot%202022-06-06%20at%204.09.52%20PM.png" style="zoom:50%;" />
+3. The resulting directory layout should look similar to the following:
+   1. <img src="./img2.png" alt="Directory layout example" style="zoom:50%;" />
 
 #### Option B: Create Directory Layout Manually
 
@@ -37,11 +35,9 @@ Alternatively, you can manually recreate the same structure.
 
 After completing one of the above versions, restart Caldera.
 
-
-
 ## Validate
 
-**NOTE**: The Cloud Analytics adversary name is currently CAP, short for Cloud Analytics Project.
+__NOTE__: The Cloud Analytics adversary name is currently CAP, short for Cloud Analytics Project.
 
 ### Adversary Profile
 
@@ -51,9 +47,7 @@ To validate the CAP profile is setup, within the Caldera web interface, navigate
 
 A screen similar to the following should be displayed.
 
-<img src="/Users/m3/Desktop/Screen Shot 2022-06-06 at 4.39.51 PM.png" alt="Screen Shot 2022-06-06 at 4.39.51 PM" style="zoom:33%;" />
-
-
+<img src="./img3.png" alt="Validate Caldera Adversary Profile loaded" style="zoom:33%;" />
 
 ### Fact Sources
 
@@ -63,4 +57,4 @@ To validate the CAP Adversary Fact Source has been setup, within the Caldera web
 
 A screen similar to the following should be displayed.
 
-<img src="/Users/m3/Desktop/Screen Shot 2022-06-06 at 4.41.08 PM.png" alt="Screen Shot 2022-06-06 at 4.41.08 PM" style="zoom:33%;" />
+<img src="./img4.png" alt="Example of Caldera fact source" style="zoom:33%;" />
