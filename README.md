@@ -6,9 +6,9 @@ Cloud Analytics helps defenders detect attacks to their cloud infrastructure by 
 
 | Resource | Description |
 |----------|-------------|
-| [Blueprint Document](/DRAFT_Analytics_Blueprint.pdf) | Best practices and lessons learned for developing cloud analytics.​ |
-| [Analytics](/analytics/) | Analytics generated in Sigma format for the project. |
-| [Adversary Emulation Tips](/demo/README.md) | Documentation on reproducing adversary emulation events for the project. |
+| [Blueprint Document](/docs/DRAFT_Analytics_Blueprint.pdf) | Best practices and lessons learned for developing cloud analytics.​ |
+| [Analytics](/analytics/README.md) | Analytics generated in Sigma format for the project. |
+| [Adversary Emulation Tips](/emulation/README.md) | Documentation on reproducing adversary emulation events for the project. |
 
 ## Questions and Feedback
 
