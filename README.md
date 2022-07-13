@@ -2,9 +2,14 @@
 
 Cloud Analytics helps defenders detect attacks to their cloud infrastructure by developing behavioral analytics to detect attacks to cloud platforms and a blueprint for how others can create and use cloud analytics effectively.
 
-## Blueprint Document Draft
 
-A draft of the [Blueprint document is available in the repository](DRAFT_Analytics_Blueprint.pdf)
+## Resources
+
+| Resource | Description |
+|----------|-------------|
+| [Blueprint Document](/docs/Blueprint.pdf) | Best practices and lessons learned for developing cloud analytics.​ |
+| [Analytics](/analytics/) | Analytics generated in Sigma format for the project. |
+| [Adversary Emulation Tips](/demo/README.md) | Documentation on reproducing adversary emulation events for the project. |
 
 ## Questions and Feedback
 
