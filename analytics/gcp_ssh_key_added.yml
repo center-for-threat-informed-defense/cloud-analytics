@@ -12,7 +12,11 @@ logsource:
 detection:
     selection:
         gcp.audit.method_name:
-            - compute.instances.setMetadata
+            - v1.compute.projects.setCommonInstanceMetadata
+        gcp.audit.service_name:
+            - compute.googleapis.com
+        protoPayload.metadata|contains: "addedMetadataKeys"
+        protoPayload.metadata|contains: "ssh-keys"
     condition: selection
 level: medium
 tags:
