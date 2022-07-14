@@ -24,8 +24,9 @@ detection:
 level: low
 tags:
     - attack.defense_evasion
+    - attack.persistence
     - attack.privilege_escalation
     - attack.t1078.004
-    - attack.t1484.001
+    - attack.t1098.003
 falsepositives:
  - Verify permissions are being granted appropriately.
