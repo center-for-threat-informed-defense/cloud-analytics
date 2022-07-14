@@ -1,0 +1,31 @@
+title: Workspace User Added To Privileged Group
+id: 2e2a283a-47a1-4811-8754-49243967f379
+description: Identifies when a user is added to a privileged group
+author: CTID MITRE, Google CSA, Michael Butt
+status: experimental
+date: 2022/07/14
+references:
+    - https://github.com/GoogleCloudPlatform/security-analytics/blob/main/src/2.02/2.02.md
+logsource:
+  product: google_workspace
+  service: google_workspace.admin
+detection:
+    selection:
+        eventService: admin.googleapis.com
+    group_name_check1:
+        protoPayload.metadata.event.parameter|contains:  'admin'
+    group_name_check2:
+        protoPayload.metadata.event.parameter|contains:  'prod'
+        group_mod_type1:
+        gcp.audit.method_name: google.admin.AdminService.addGroupMember
+    group_mod_type2:
+        gcp.audit.method_name: google.admin.AdminService.groupMemberBulkUpload
+    condition: selection and (1 of group_mod_type*) and (1 of group_name_check*)
+level: low
+tags:
+    - attack.defense_evasion
+    - attack.privilege_escalation
+    - attack.t1078.004
+    - attack.t1484.001
+falsepositives:
+ - Verify permissions are being granted appropriately.

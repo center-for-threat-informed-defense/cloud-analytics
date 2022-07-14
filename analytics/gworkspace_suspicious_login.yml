@@ -14,8 +14,8 @@ detection:
         eventService: admin.googleapis.com
         gcp.audit.method_name:
             - google.login.LoginService.loginSuccess
-        parameter|contains:  '\"boolValue\": true'
-        parameter|contains:  '\"name\": \"is_suspicious\"'
+        protoPayload.metadata.event.parameter|contains:  '\"boolValue\": true'
+        protoPayload.metadata.event.parameter|contains:  '\"name\": \"is_suspicious\"'
     condition: selection
 level: low
 tags:

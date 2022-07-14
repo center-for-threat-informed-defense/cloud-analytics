@@ -21,5 +21,7 @@ detection:
     condition: selection
 tags:
     - attack.exfiltration
+    - attack.t1078.004
+    - attack.t1537
 falsepositives:
  - Verify if user is performing authorized command but missing appropriate controls, such as perimeter bridges.
