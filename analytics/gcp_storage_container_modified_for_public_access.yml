@@ -17,6 +17,7 @@ detection:
             - storage.setIamPermissions
         parameter|contains:  '\"action\": \"ADD'
         parameter|contains:  'allUsers'
+    condition: selection
 tags:
     - attack.defense_evasion
     - attack.t1578

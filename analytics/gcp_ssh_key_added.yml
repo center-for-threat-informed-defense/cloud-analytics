@@ -12,7 +12,7 @@ logsource:
 detection:
     selection:
         gcp.audit.method_name:
-            - v1.compute.projects.setCommonInstanceMetadata
+            - v*.compute.projects.setCommonInstanceMetadata
         gcp.audit.service_name:
             - compute.googleapis.com
         protoPayload.metadata|contains: "addedMetadataKeys"

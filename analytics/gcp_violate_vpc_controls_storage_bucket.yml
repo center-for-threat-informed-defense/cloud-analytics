@@ -1,0 +1,25 @@
+title: Google VPC Service Controls Violation Storage Bucket
+id: 34d90319-49a6-4244-8d39-63d166fb139f
+description: Identifies when access attempt blocked by VPC Service Controls
+author: CTID Mitre, Google Cloud CSA, Michael Butt
+status: experimental
+date: 2022/07/14
+references:
+    - https://github.com/GoogleCloudPlatform/security-analytics/blob/main/src/1.10/1.10.md
+logsource:
+  product: gcp
+  service: gcp.audit
+level: medium
+detection:
+    selection:
+        gcp.audit.method_name:
+            - storage.storage.objects.get
+        gcp.audit.service_name:
+            - storage.googleapis.com
+        protoPayload.metadata|contains: "type.googleapis.com/google.cloud.audit.VpcServiceControlAuditMetadata"
+        protoPayload.metadata.violationReason|contains: "*"
+    condition: selection
+tags:
+    - attack.exfiltration
+falsepositives:
+ - Verify if user is performing authorized command but missing appropriate controls, such as perimeter bridges.
