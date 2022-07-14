@@ -1,0 +1,289 @@
+{
+	"name": "Sigma rules heatmap",
+	"versions": {
+		"attack": "11",
+		"navigator": "4.6.5",
+		"layer": "4.3"
+	},
+	"domain": "enterprise-attack",
+	"description": "",
+	"filters": {
+		"platforms": [
+			"Office 365",
+			"SaaS",
+			"Google Workspace",
+			"IaaS",
+			"Azure AD"
+		]
+	},
+	"sorting": 0,
+	"layout": {
+		"layout": "side",
+		"aggregateFunction": "sum",
+		"showID": true,
+		"showName": true,
+		"showAggregateScores": true,
+		"countUnscored": false
+	},
+	"hideDisabled": false,
+	"techniques": [
+		{
+			"techniqueID": "T1578",
+			"tactic": "defense-evasion",
+			"score": 2,
+			"color": "",
+			"comment": "gcp_storage_container_modified_for_public_access.yml\nazure_storage_container_modified_for_public_access.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1621",
+			"tactic": "credential-access",
+			"score": 1,
+			"color": "",
+			"comment": "",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1098.001",
+			"tactic": "persistence",
+			"score": 2,
+			"color": "",
+			"comment": "gcp_ssh_key_added.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1078",
+			"tactic": "defense-evasion",
+			"score": 2,
+			"color": "",
+			"comment": "azure_guest_user_priv_escalation.yml\nazure_service_principal_priv_escalation.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": true
+		},
+		{
+			"techniqueID": "T1078",
+			"tactic": "persistence",
+			"score": 2,
+			"color": "",
+			"comment": "azure_guest_user_priv_escalation.yml\nazure_service_principal_priv_escalation.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": true
+		},
+		{
+			"techniqueID": "T1078",
+			"tactic": "privilege-escalation",
+			"score": 2,
+			"color": "",
+			"comment": "azure_guest_user_priv_escalation.yml\nazure_service_principal_priv_escalation.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": true
+		},
+		{
+			"techniqueID": "T1078",
+			"tactic": "initial-access",
+			"score": 2,
+			"color": "",
+			"comment": "azure_guest_user_priv_escalation.yml\nazure_service_principal_priv_escalation.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": true
+		},
+		{
+			"techniqueID": "T1078.004",
+			"tactic": "defense-evasion",
+			"score": 4,
+			"color": "",
+			"comment": "azure_mfa_denies.yml\ngworkspace_suspicious_login.yml\ngworkspace_user_added_priv_group.yml\ngcp_violate_vpc_controls_storage_bucket.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1078.004",
+			"tactic": "persistence",
+			"score": 4,
+			"color": "",
+			"comment": "azure_mfa_denies.yml\ngworkspace_suspicious_login.yml\ngworkspace_user_added_priv_group.yml\ngcp_violate_vpc_controls_storage_bucket.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1078.004",
+			"tactic": "privilege-escalation",
+			"score": 4,
+			"color": "",
+			"comment": "azure_mfa_denies.yml\ngworkspace_suspicious_login.yml\ngworkspace_user_added_priv_group.yml\ngcp_violate_vpc_controls_storage_bucket.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1078.004",
+			"tactic": "initial-access",
+			"score": 4,
+			"color": "",
+			"comment": "azure_mfa_denies.yml\ngworkspace_suspicious_login.yml\ngworkspace_user_added_priv_group.yml\ngcp_violate_vpc_controls_storage_bucket.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1496",
+			"tactic": "impact",
+			"score": 2,
+			"color": "",
+			"comment": "azure_autoscaling_threshold_exceeded.yml\ngcp_autoscaling_threshold_exceeded.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1537",
+			"tactic": "exfiltration",
+			"score": 1,
+			"color": "",
+			"comment": "gcp_violate_vpc_controls_storage_bucket.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1484",
+			"tactic": "defense-evasion",
+			"score": 1,
+			"color": "",
+			"comment": "azure_role_elevated_outside_pim.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": true
+		},
+		{
+			"techniqueID": "T1484",
+			"tactic": "privilege-escalation",
+			"score": 1,
+			"color": "",
+			"comment": "azure_role_elevated_outside_pim.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": true
+		},
+		{
+			"techniqueID": "T1484.002",
+			"tactic": "defense-evasion",
+			"score": 1,
+			"color": "",
+			"comment": "gcp_perms_granted_over_service_acct.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1484.002",
+			"tactic": "privilege-escalation",
+			"score": 1,
+			"color": "",
+			"comment": "gcp_perms_granted_over_service_acct.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1484.001",
+			"tactic": "defense-evasion",
+			"score": 1,
+			"color": "",
+			"comment": "gworkspace_user_added_priv_group.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1484.001",
+			"tactic": "privilege-escalation",
+			"score": 1,
+			"color": "",
+			"comment": "gworkspace_user_added_priv_group.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1556",
+			"tactic": "credential-access",
+			"score": 1,
+			"color": "",
+			"comment": "azure_mfa_disabled.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1556",
+			"tactic": "defense-evasion",
+			"score": 1,
+			"color": "",
+			"comment": "azure_mfa_disabled.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		},
+		{
+			"techniqueID": "T1556",
+			"tactic": "persistence",
+			"score": 1,
+			"color": "",
+			"comment": "azure_mfa_disabled.yml",
+			"enabled": true,
+			"metadata": [],
+			"links": [],
+			"showSubtechniques": false
+		}
+	],
+	"gradient": {
+		"colors": [
+			"#66b1ffff",
+			"#ff66f4ff",
+			"#ff6666ff"
+		],
+		"minValue": 0,
+		"maxValue": 5
+	},
+	"legendItems": [],
+	"metadata": [],
+	"links": [],
+	"showTacticRowBackground": false,
+	"tacticRowBackground": "#dddddd",
+	"selectTechniquesAcrossTactics": false,
+	"selectSubtechniquesWithParent": false
+}

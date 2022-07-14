@@ -1,5 +1,5 @@
-title: Google VPC Service Controls Violation Storage Bucket
-id: 34d90319-49a6-4244-8d39-63d166fb139f
+title: Google VPC Service Controls Violation for Storage Bucket Access
+id: d30cbfe0-563d-4c98-bf42-381769baf30b
 description: Identifies when access attempt blocked by VPC Service Controls
 author: CTID Mitre, Google Cloud CSA, Michael Butt
 status: experimental
