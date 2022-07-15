@@ -19,7 +19,7 @@ Also see the guidance for contributors if are you interested in contributing or 
 
 ## Notice
 
-Copyright 2021 MITRE Engenuity. Approved for public release. Document number XXXXX
+Copyright 2022 MITRE Engenuity. Approved for public release. Document number CT0053
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
