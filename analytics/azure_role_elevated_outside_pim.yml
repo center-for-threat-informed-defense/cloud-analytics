@@ -1,7 +1,7 @@
 title: Role Elevated Outside of PIM
 id: abd97f2e-bfb3-4aa5-b55e-0480c70a736e
 description: Identifies when a privileged role assignment has been made outside of the Privileged Identity Management tool.
-author: CTID MITRE, Michael Butt
+author: Center for Threat-Informed Defense, Michael Butt
 status: experimental
 date: 2022/06/07
 references:

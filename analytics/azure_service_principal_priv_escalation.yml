@@ -1,7 +1,7 @@
 title: Service Principal Privilege Escalation
 id: a6cca0de-5f89-4949-8a2d-20982510cf9f
 description: Identifies when a service principal has privileges escalated to Global Administrator.
-author: CTID MITRE, Michael Butt
+author: Center for Threat-Informed Defense, Michael Butt
 status: experimental
 date: 2022/06/07
 references:

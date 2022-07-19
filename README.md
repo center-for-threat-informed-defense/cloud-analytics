@@ -2,9 +2,14 @@
 
 Cloud Analytics helps defenders detect attacks to their cloud infrastructure by developing behavioral analytics to detect attacks to cloud platforms and a blueprint for how others can create and use cloud analytics effectively.
 
-## Blueprint Document Draft
+## Resources
 
-A draft of the [Blueprint document is available in the repository](DRAFT_Analytics_Blueprint.pdf)
+| Resource | Description |
+|----------|-------------|
+| [Blueprint Document](/docs/DRAFT_Analytics_Blueprint.pdf) | Best practices and lessons learned for developing cloud analytics.​ |
+| [Analytics](/analytics/README.md) | Analytics generated in Sigma format for the project. |
+| [Adversary Emulation Tips](/emulation/README.md) | Documentation on reproducing adversary emulation events for the project. |
+| [Support Resources](/support/README.md) | Resources not part of final deliverable, but potentially useful. |
 
 ## Questions and Feedback
 
@@ -14,7 +19,7 @@ Also see the guidance for contributors if are you interested in contributing or 
 
 ## Notice
 
-Copyright 2021 MITRE Engenuity. Approved for public release. Document number XXXXX
+Copyright 2022 MITRE Engenuity. Approved for public release. Document number CT0053
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
