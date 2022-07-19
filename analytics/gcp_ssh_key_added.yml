@@ -1,7 +1,7 @@
 title: GCP SSH Key Added
 id: 7cb3c993-3dc3-4075-8ab9-da59e82b4db7
 description: Identifies when an SSH key is added to an instance.
-author: CTID MITRE, Michael Butt
+author: Center for Threat-Informed Defense, Michael Butt
 status: experimental
 date: 2022/06/07
 references:

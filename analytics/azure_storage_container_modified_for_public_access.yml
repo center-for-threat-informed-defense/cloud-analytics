@@ -2,7 +2,7 @@ title: Azure Storage Blob Access Modified
 id: b3ffe973-457d-4a00-bb5f-4ceb1cda5308
 name: azure_storage_mod_public
 description: Identifies when a previously existing storage container has access control modified to enable public access
-author: CTID MITRE, Michael Butt
+author: Center for Threat-Informed Defense, Michael Butt
 status: experimental
 date: 2022/05/17
 references:
