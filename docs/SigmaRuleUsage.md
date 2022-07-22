@@ -28,14 +28,14 @@ The [Sigma documentation on rule creation](https://github.com/SigmaHQ/sigma/wiki
 
 
 
-| Field                 | Notes                                                        |
-| :-------------------- | :----------------------------------------------------------- |
-| title                 | Use title casing, less than 50 characters                    |
-| status                | All new rules community start as `experimental` status, promoted after successful community usage. |
-| tags                  | Reference ATT&CK, CAR when relevant, for example `attack.t1059` or `car.2014-04-003` |
-| logsource             |                                                              |
-| logsource.product     | For cloud services, convention is `product` to represent the cloud provider, such as `azure` or `gcp`. |
-| logsource.service[^1] | For cloud services, convention uses the `service` field to represent the specific log the alert will be found in. For example, `azureactivity`  represents the `auditlogs` represents the Azure Audit Logs, while `gcp.audit` represents the the Google Audit Log source. |
+| Field                 | Notes                                                        | Mapping                                         |
+| :-------------------- | :----------------------------------------------------------- | ----------------------------------------------- |
+| title                 | Use title casing, less than 50 characters                    |                                                 |
+| status                | All new rules community start as `experimental` status, promoted after successful community usage. |                                                 |
+| tags                  | Reference ATT&CK, CAR when relevant, for example `attack.t1059` or `car.2014-04-003` |                                                 |
+| logsource.product     | For cloud services, convention is `product` to represent the cloud provider, such as `azure` or `gcp`. |                                                 |
+| logsource.service[^1] | For cloud services, convention is `service` to represent the specific log the alert will be found in. For example, `azureactivity`  represents the `auditlogs` represents the Azure Audit Logs, while `gcp.audit` represents the the Google Audit Log source. | Maps to data source in target query language    |
+| detection             | The detection section defines the query criteria required for the rule. | Maps to query criteria in target query language |
 
 *Tip: The [Visual Studio Code `sigma` plugin](https://marketplace.visualstudio.com/items?itemName=humpalum.sigma) is useful during Sigma rule development. The plugin flags common issues in Sigma rule creation such as missing fields, and provides useful features such as generating new UUIDs for a rule.*
 
@@ -47,13 +47,19 @@ The [Sigma documentation on rule creation](https://github.com/SigmaHQ/sigma/wiki
 
 #### Converters
 
-The Sigma converter, such as [Sigmac](https://github.com/SigmaHQ/sigma/blob/master/tools/README.md), a conversion tool for converting generic Sigma rules to platform-specific queries.
+Sigma converters, such as [Sigmac](https://github.com/SigmaHQ/sigma/blob/master/tools/README.md) and [pySigma](https://github.com/SigmaHQ/pySigma), a conversion tool for converting generic Sigma rules to platform-specific queries. Sigmac is in the process of being deprecated, and the Sigma project recommends new development to target pySigma going forward. In addition to the command line tools, SOC Prime provides the [Uncoder.io](https://uncoder.io/) website as a web-based application for Sigma rule conversion.
 
+##### Azure
 
+A few different targets exist for converting Sigma rules to Azure backends. For log querying using the Log Analytics toolset, the _Microsoft Sentinel Query_ target on Uncoder.io provides conversion compatibility.
 
-### Azure
+##### GCP
 
-### GCP
+At the moment, the Google Chronicle converter for targeting YARA-L rules is the primary backend supported for the GCP platform. Chronicle and YARA-L were out of scope of the project and not explored in detail. Future work on a GCP Big Query backend target for Sigma conversion would be beneficial to community use.
+
+##### Manual
+
+The tooling mentioned above is useful, however it is also possible to manually convert Sigma rules with an understanding of the target query language.
 
 
 
