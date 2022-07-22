@@ -28,21 +28,14 @@ The [Sigma documentation on rule creation](https://github.com/SigmaHQ/sigma/wiki
 
 
 
-| Field                  | Notes                                                        |
-| :--------------------- | :----------------------------------------------------------- |
-| title                  | Use title casing, less than 50 characters                    |
-| status                 | All new rules community start as `experimental` status, promoted after successful community usage. |
-| tags                   | Reference ATT&CK, CAR when relevant, for example `attack.t1059` or `car.2014-04-003` |
-| logsource.product      | For cloud services, convention is `product` to represent the cloud provider, such as `azure` or `gcp`. |
-| logsource.service[1]() | For cloud services, convention is `service` to represent the specific log the alert will be found in. For example, `azureactivity`  represents the `auditlogs` represents the Azure Audit Logs, while `gcp.audit` represents the the Google Audit Log source. |
-
-Log source definitions can be particularly confusing for Sigma rules related to cloud services.
-
-logsource.service
-
-
-
-
+| Field                 | Notes                                                        |
+| :-------------------- | :----------------------------------------------------------- |
+| title                 | Use title casing, less than 50 characters                    |
+| status                | All new rules community start as `experimental` status, promoted after successful community usage. |
+| tags                  | Reference ATT&CK, CAR when relevant, for example `attack.t1059` or `car.2014-04-003` |
+| logsource             |                                                              |
+| logsource.product     | For cloud services, convention is `product` to represent the cloud provider, such as `azure` or `gcp`. |
+| logsource.service[^1] | For cloud services, convention uses the `service` field to represent the specific log the alert will be found in. For example, `azureactivity`  represents the `auditlogs` represents the Azure Audit Logs, while `gcp.audit` represents the the Google Audit Log source. |
 
 *Tip: The [Visual Studio Code `sigma` plugin](https://marketplace.visualstudio.com/items?itemName=humpalum.sigma) is useful during Sigma rule development. The plugin flags common issues in Sigma rule creation such as missing fields, and provides useful features such as generating new UUIDs for a rule.*
 
