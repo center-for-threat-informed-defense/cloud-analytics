@@ -15,8 +15,9 @@ detection:
         gcp.audit.method_name:
             - google.login.LoginService.loginSuccess
         protoPayload.metadata.event.parameter|contains:  '\"boolValue\": true'
+    selection_suspicious:
         protoPayload.metadata.event.parameter|contains:  '\"name\": \"is_suspicious\"'
-    condition: selection
+    condition: selection and selection_suspicious
 level: low
 tags:
     - attack.initial_access

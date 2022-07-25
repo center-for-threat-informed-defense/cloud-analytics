@@ -17,8 +17,9 @@ detection:
         gcp.audit.service_name:
             - storage.googleapis.com
         protoPayload.metadata|contains: "type.googleapis.com/google.cloud.audit.VpcServiceControlAuditMetadata"
+    selection_violation:
         protoPayload.metadata.violationReason|contains: "*"
-    condition: selection
+    condition: selection and selection_violation
 tags:
     - attack.exfiltration
     - attack.t1078.004
