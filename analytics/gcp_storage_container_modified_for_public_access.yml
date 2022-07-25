@@ -16,8 +16,9 @@ detection:
         gcp.audit.method_name:
             - storage.setIamPermissions
         parameter|contains:  '\"action\": \"ADD'
+    selection_allusers:
         parameter|contains:  'allUsers'
-    condition: selection
+    condition: selection and selection_allusers
 tags:
     - attack.defense_evasion
     - attack.t1578

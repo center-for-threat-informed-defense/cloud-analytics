@@ -25,6 +25,8 @@
         command: |
           if (Get-InstalledModule -Name Az -ErrorAction SilentlyContinue) { ; }
           else { Install-Module -Name Az -Force }; ;
+          if (Get-InstalledModule -Name GoogleCloud -ErrorAction SilentlyContinue) { ; }
+          else { Install-Module -Name GoogleCloud -Force }; ;
           $azAppId ="#{identity.app.id}";
           $azTenantId= "#{identity.tenant}";
           $azPass = ConvertTo-SecureString "#{identity.app.pw}" -AsPlainText -Force;
@@ -38,6 +40,9 @@
           Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
           Set-AzStorageContainerAcl -Container $containerName -Permission Container -Context $ctx;
           Get-AzStorageContainerAcl -Container $containerName -Context $ctx;
+          gcloud auth activate-service-account #{identity.gcloud.account} --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid}
+          Add-GcsBucketAcl -Role Reader -Bucket "#{gcloud.bucket.name}" -AllUsers
+
 
   input_arguments:
     identity.app.id:
@@ -52,12 +57,30 @@
       description: ID of tenant service principal is assigned to
       type: string
       default: unknown
+    identity.gcloud.account:
+      description: Service account of GCloud account
+      type: string
+      default: unknown
+    identity.gcloud.key:
+      description: Filename of service account key. MUST be in vagrant directory
+      type: string
+      default: key.json
+    identity.gcloud.projectid:
+      description: Project ID for service account
+      type: string
+      default: unknown
+    gcloud.bucket.name:
+      description: Bucket name for Google Cloud usage
+      type: string
+      default: unknown
 
   executors:
     - name: powershell
       command: |
         if (Get-InstalledModule -Name Az -ErrorAction SilentlyContinue) { ; }
         else { Install-Module -Name Az -Force }; ;
+        if (Get-InstalledModule -Name GoogleCloud -ErrorAction SilentlyContinue) { ; }
+        else { Install-Module -Name GoogleCloud -Force }; ;
         $azAppId ="#{identity.app.id}";
         $azTenantId= "#{identity.tenant}";
         $azPass = ConvertTo-SecureString "#{identity.app.pw}" -AsPlainText -Force;
