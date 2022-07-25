@@ -4,7 +4,43 @@ Using the emu plugin for Caldera makes it easy, but it is not obvious at all how
 
 __NOTE__: Caldera 4.0.0-beta was used for the following instructions. Not tested on other versions.
 
-## Setup
+## Initial Setup
+
+### Setup Caldera
+
+NOTE: Assumes user has setup [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). Vagrant provides a straightforward workflow to create a reusable, repeatable environment shareable by vagrant users.
+
+Within the `cloud-analytics/emulation/caldera-vagrant/` directory, of the [Cloud Analytics](https://github.com/center-for-threat-informed-defense/cloud-analytics) project, there is a vagrant configuration which will install [Caldera](https://github.com/mitre/caldera) from scratch on a new virtual machine instance.
+
+1. Open a terminal window, and change to the `caldera-vagrant` directory: `cd ./cloud-analytics/emulation/caldera-vagrant/`
+
+2. Run `vagrant up` to initialize the vagrant environment. How long this takes is highly dependent on your network connection. Vagrant will first perform a one-time download of the base box, `ubuntu/focal64`, and then provision the VM by installing and configuring Caldera.
+
+3. Once Caldera is fully provisioned, you should see a banner similar to the following, with a URL to connect to the Caldera web interface.
+
+   1. **NOTE**: Due to a quirk in the Caldera 4.x beta, after vagrant is complete and the system boots up, you should wait approximately 3 minutes, then run `vagrant reload` from your host system to restart. Otherwise, Caldera may hang on plugin initialization and not fully startup the web interface. After waiting a few minutes and running `vagrant reload`, Caldera should properly start on all startups going forward.
+
+   2. ```
+       ###########################################################
+       #                                                         #
+       #                                                         #
+       #                                                         #
+       #                                                         #
+       #   Connect to Caldera at http://192.168.56.24:8888
+       #                                                         #
+       #                                                         #
+       #                                                         #
+       #                                                         #
+       ###########################################################
+      ```
+
+4. Open a web browser and connect to Caldera at the URL specified in the terminal, as shown in the previous step. You should see a login screen similar to the following.
+
+5.
+
+
+
+## Post-Install Setup
 
 ### Ensure EMU Plugin is Enabled
 
