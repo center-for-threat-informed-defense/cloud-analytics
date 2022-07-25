@@ -18,6 +18,7 @@ __NOTE__: Caldera 4.0.0-beta was used for the following instructions. Not tested
   - [Validate](#validate)
     - [Adversary Profile](#adversary-profile)
     - [Fact Sources](#fact-sources)
+      - [Google Cloud Auth Setup](#google-cloud-auth-setup)
   - [References](#references)
 
 ## Initial Setup
@@ -157,6 +158,19 @@ To validate the CAP Adversary Fact Source has been setup, within the Caldera web
 A screen similar to the following should be displayed.
 
 <img src="./imgs/img4.png" alt="Example of Caldera fact source" style="zoom:33%;" />
+
+
+
+
+
+#### Google Cloud Auth Setup
+
+For Google Cloud, perform the following setup steps prior to running the adversary emulation plan.
+
+1. Setup a service account with appropriate permissions by following the [Google Cloud documentation.](https://cloud.google.com/sdk/gcloud/reference/iam/service-accounts/create)
+2. Save the service account key file as `key.json` within the `caldera-win-agent-1` directory, `cloud-analytics/emulation/caldera-win-agent-1/key.json`.
+   1. *[Optional]* If you used a different filename other than `key.json`, update within Caldera `FACTS` section, set the`identity.gcloud.key` value just the base filename. For example, if you used `sa.json` instead of `key.json`, set the fact to `sa.json`. Do __not__ include the filepath.
+3. Set the `identity.gcloud.account` variable to the Google Cloud service account name, such as `my-svc-account@mydomain.com`.
 
 ## References
 

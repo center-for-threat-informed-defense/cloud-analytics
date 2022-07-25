@@ -25,6 +25,8 @@
         command: |
           if (Get-InstalledModule -Name Az -ErrorAction SilentlyContinue) { ; }
           else { Install-Module -Name Az -Force }; ;
+          if (Get-InstalledModule -Name GoogleCloud -ErrorAction SilentlyContinue) { ; }
+          else { Install-Module -Name GoogleCloud -Force }; ;
           $azAppId ="#{identity.app.id}";
           $azTenantId= "#{identity.tenant}";
           $azPass = ConvertTo-SecureString "#{identity.app.pw}" -AsPlainText -Force;
@@ -58,6 +60,8 @@
       command: |
         if (Get-InstalledModule -Name Az -ErrorAction SilentlyContinue) { ; }
         else { Install-Module -Name Az -Force }; ;
+        if (Get-InstalledModule -Name GoogleCloud -ErrorAction SilentlyContinue) { ; }
+        else { Install-Module -Name GoogleCloud -Force }; ;
         $azAppId ="#{identity.app.id}";
         $azTenantId= "#{identity.tenant}";
         $azPass = ConvertTo-SecureString "#{identity.app.pw}" -AsPlainText -Force;
