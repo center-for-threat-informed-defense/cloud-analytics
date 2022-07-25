@@ -1,20 +1,19 @@
-# Cloud Analytics Sigma Rule Quickstart<!-- omit from toc -->
-
-***Status: In Review***
+# Cloud Analytics Sigma Rule Quickstart
 
 The goal of this document is to cover information relating to Sigma rule creation, usage, and best practices.
 
-- [What is Sigma](#what-is-sigma)
-- [Rules](#rules)
-  - [Creation](#creation)
-  - [Sigma Rule Usage](#sigma-rule-usage)
-    - [Converters](#converters)
-      - [Azure](#azure)
-      - [GCP](#gcp)
-      - [Manual](#manual)
-        - [Manual Converted Query](#manual-converted-query)
-        - [Manual Query Result](#manual-query-result)
-- [References](#references)
+- [Cloud Analytics Sigma Rule Quickstart](#cloud-analytics-sigma-rule-quickstart)
+  - [What is Sigma](#what-is-sigma)
+  - [Rules](#rules)
+    - [Creation](#creation)
+    - [Sigma Rule Usage](#sigma-rule-usage)
+      - [Converters](#converters)
+        - [Azure](#azure)
+        - [GCP](#gcp)
+        - [Manual](#manual)
+          - [Manual Converted Query](#manual-converted-query)
+          - [Manual Query Result](#manual-query-result)
+  - [References](#references)
 
 ## What is Sigma
 
