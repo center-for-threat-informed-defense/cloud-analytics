@@ -2,18 +2,17 @@
 
 The goal of this document is to cover information relating to Sigma rule creation, usage, and best practices.
 
-- [Cloud Analytics Sigma Rule Quickstart](#cloud-analytics-sigma-rule-quickstart)
-  - [What is Sigma](#what-is-sigma)
-  - [Rules](#rules)
-    - [Creation](#creation)
-    - [Sigma Rule Usage](#sigma-rule-usage)
-      - [Converters](#converters)
-        - [Azure](#azure)
-        - [GCP](#gcp)
-        - [Manual](#manual)
-          - [Manual Converted Query](#manual-converted-query)
-          - [Manual Query Result](#manual-query-result)
-  - [References](#references)
+- [What is Sigma](#what-is-sigma)
+- [Rules](#rules)
+  - [Creation](#creation)
+  - [Sigma Rule Usage](#sigma-rule-usage)
+    - [Converters](#converters)
+      - [Azure](#azure)
+      - [GCP](#gcp)
+      - [Manual](#manual)
+        - [Manual Converted Query](#manual-converted-query)
+        - [Manual Query Result](#manual-query-result)
+- [References](#references)
 
 ## What is Sigma
 
@@ -52,7 +51,7 @@ Sigma converters, such as [Sigmac](https://github.com/SigmaHQ/sigma/blob/master/
 
 ##### Azure
 
-A few different targets exist for converting Sigma rules to Azure backends. For log querying using the Log Analytics toolset, the _Microsoft Sentinel Query_ target on Uncoder.io provides conversion compatibility.
+A few different targets exist for converting Sigma rules to Azure backends. For log querying using the Log Analytics toolset, the *Microsoft Sentinel Query* target on Uncoder.io provides conversion compatibility.
 
 ##### GCP
 

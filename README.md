@@ -1,14 +1,14 @@
 # Cloud Analytics
 
-Cloud Analytics helps defenders detect attacks to their cloud infrastructure by developing behavioral analytics to detect attacks to cloud platforms and a blueprint for how others can create and use cloud analytics effectively.
+This Cloud Analytics project researched and developed best practices to help defenders improve their ability to detect adversary behaviors in today's complex cloud environments. This repository contains behavioral analytics to detect attacks to cloud platforms and a blueprint for how others can create and use cloud analytics effectively.
 
 ## Resources
 
 | Resource | Description |
 |----------|-------------|
-| [Blueprint Document](/docs/DRAFT_Analytics_Blueprint.pdf) | Best practices and lessons learned for developing cloud analytics.​ |
+| [Blueprint Document](/docs/Cloud_Analytics_Development_Blueprint.pdf) | Best practices and lessons learned for developing cloud analytics.​ |
 | [Analytics](/analytics/) | Analytics generated in Sigma format for the project. |
-| [Adversary Emulation Tips](/emulation/) | Documentation on reproducing adversary emulation events for the project. |
+| [Caldera Emulation Tips](/emulation/) | Documentation on reproducing adversary emulation using Caldera. |
 | [Sigma Rule Information](/docs/) | Documentation on using Sigma rules in relation to Cloud Analytics. |
 | [Support Resources](/support/) | Resources not part of final deliverable, but potentially useful. |
 

@@ -19,15 +19,17 @@ detection:
     group_name_check2:
         protoPayload.metadata.event.parameter|contains:  'prod'
     role_name_check1:
-        protoPayload.serviceData.policyDelta.bindingDeltas|contains: 'admin'
-        protoPayload.serviceData.policyDelta.action|contains: 'ADD'
+        protoPayload.serviceData.policyDelta.bindingDeltas: null
+    role_name_check2:
+        - 'admin'
+        - 'ADD'
     group_mod_type1:
         gcp.audit.method_name: google.admin.AdminService.addGroupMember
     group_mod_type2:
         gcp.audit.method_name: google.admin.AdminService.groupMemberBulkUpload
     group_mod_type3:
         gcp.audit.method_name: SetIamPolicy
-    condition: (1 of selection_service*) and (1 of group_mod_type*) and (1 of group_name_check*)
+    condition: (1 of selection_service*) and (1 of group_mod_type*) and (1 of (1 of group_name_check*) OR (role_name_check2 and not role_name_check1)
 level: low
 tags:
     - attack.defense_evasion

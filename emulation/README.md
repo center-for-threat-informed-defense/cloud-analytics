@@ -4,22 +4,21 @@ Using the emu plugin for Caldera makes it easy, but it is not obvious how it wor
 
 __NOTE__: Caldera 4.0.0-beta was used for the following instructions. Not tested on other versions.
 
-- [Using Cloud Analytics with Caldera](#using-cloud-analytics-with-caldera)
-  - [Initial Setup](#initial-setup)
-    - [Setup Caldera Server](#setup-caldera-server)
-    - [Setup Windows Guest](#setup-windows-guest)
-    - [Add Windows VM as Caldera Agent](#add-windows-vm-as-caldera-agent)
-  - [Post-Install Setup](#post-install-setup)
-    - [Ensure EMU Plugin is Enabled](#ensure-emu-plugin-is-enabled)
-    - [Install New Advesary Emulation Plan](#install-new-advesary-emulation-plan)
-        - [Option A: Install From AEP Archive](#option-a-install-from-aep-archive)
-        - [Option B: Create Directory Layout Manually](#option-b-create-directory-layout-manually)
-    - [Activate New Adversary Emulation Plan](#activate-new-adversary-emulation-plan)
-  - [Validate](#validate)
-    - [Adversary Profile](#adversary-profile)
-    - [Fact Sources](#fact-sources)
-      - [Google Cloud Auth Setup](#google-cloud-auth-setup)
-  - [References](#references)
+- [Initial Setup](#initial-setup)
+  - [Setup Caldera Server](#setup-caldera-server)
+  - [Setup Windows Guest](#setup-windows-guest)
+  - [Add Windows VM as Caldera Agent](#add-windows-vm-as-caldera-agent)
+- [Post-Install Setup](#post-install-setup)
+  - [Ensure EMU Plugin is Enabled](#ensure-emu-plugin-is-enabled)
+  - [Install New Adversary Emulation Plan](#install-new-adversary-emulation-plan)
+    - [Option A: Install From AEP Archive](#option-a-install-from-aep-archive)
+    - [Option B: Create Directory Layout Manually](#option-b-create-directory-layout-manually)
+  - [Activate New Adversary Emulation Plan](#activate-new-adversary-emulation-plan)
+- [Validate](#validate)
+  - [Adversary Profile](#adversary-profile)
+  - [Fact Sources](#fact-sources)
+    - [Google Cloud Auth Setup](#google-cloud-auth-setup)
+- [References](#references)
 
 ## Initial Setup
 
@@ -106,16 +105,16 @@ Make sure the emu plugin is enabled within Caldera. If not, navigate to _Configu
 
 <img src="./imgs/img1.png" alt="Caldera EMU plugin enabled check" style="zoom:30%;" />
 
-### Install New Advesary Emulation Plan
+### Install New Adversary Emulation Plan
 
 __NOTE__: If you are using the Vagrant Caldera setup installed earlier, read the following:
 
 - You can ssh to the Caldera instance by `cd cloud-analytics/emulation/caldera-vagrant`, then running `vagrant ssh`.
 - To copy the adversary emulation plan, copy the `aep1-package-caldera.tar.gz` package to the vagrant directory. For example, `cp cloud-analytics/emulation/aep1-package-caldera.tar.gz cloud-analytics/emulation/caldera-vagrant/`.
 
-##### Option A: Install From AEP Archive
+#### Option A: Install From AEP Archive
 
-1. On the command line on the Caldera system, navigate to the following directory (`CALDERA_HOME` denotes the home directory of the Caldera installation).
+1. On the command line on the Caldera system, navigate to the following directory (`CALDERA_HOME` denotes the home directory of the Caldera installation. For vagrant users, `CALDERA_HOME=/home/vagrant/caldera`).
    1. `cd CALDERA_HOME/plugins/emu/data/adversary-emulation-plans`
 2. Copy the attached file to the Caldera system, and decompress while in the directory in the previous step.
    1. `tar -zxvf /path/to/aep1-package-caldera.tar.gz`
@@ -123,21 +122,22 @@ __NOTE__: If you are using the Vagrant Caldera setup installed earlier, read the
 3. The resulting directory layout should look similar to the following:
    1. <img src="./imgs/img2.png" alt="Directory layout example" style="zoom:50%;" />
 
-##### Option B: Create Directory Layout Manually
+#### Option B: Create Directory Layout Manually
 
 Alternatively, you can manually recreate the same structure.
 
 1. `cd CALDERA_HOME/plugins/emu/data/adversary-emulation-plans`
-2. `mkdir -p aep1/Emulation_Plan/yaml/`
+2. `mkdir -p aep{1,-gcp1}/Emulation_Plan/yaml/`
 3. `cp /path/to/aep1.yaml ./aep1/Emulation_Plan/yaml/`
+4. `cp /path/to/aep-gcp1.yaml ./aep-gcp1/Emulation_Plan/yaml/`
 
 ### Activate New Adversary Emulation Plan
 
-After completing one of the above versions, restart Caldera.
+After completing one of the above versions, restart Caldera. If using vagrant, run either `sudo systemctl restart caldera.service` from the vagrant ssh command line interface, or run `vagrant reload` from your host system.
 
 ## Validate
 
-__NOTE__: The Cloud Analytics adversary name is currently CAP, short for Cloud Analytics Project.
+__NOTE__: The Cloud Analytics adversary names are currently CAP, short for Cloud Analytics Project, and CAPGCP, Cloud Analytics Project Google Cloud Platform.
 
 ### Adversary Profile
 
@@ -171,6 +171,7 @@ For Google Cloud, perform the following setup steps prior to running the adversa
 2. Save the service account key file as `key.json` within the `caldera-win-agent-1` directory, `cloud-analytics/emulation/caldera-win-agent-1/key.json`.
    1. *[Optional]* If you used a different filename other than `key.json`, update within Caldera `FACTS` section, set the`identity.gcloud.key` value just the base filename. For example, if you used `sa.json` instead of `key.json`, set the fact to `sa.json`. Do __not__ include the filepath.
 3. Set the `identity.gcloud.account` variable to the Google Cloud service account name, such as `my-svc-account@mydomain.com`.
+4. NOTE: It is __strongly__ recommended to [pre-install the gcloud CLI](https://cloud.google.com/sdk/docs/install) on the Windows agent prior to executing the GCP Adversary Emulation Plan, as it may timeout when run via Caldera depending on available system resources. Reboot the Windows agent after installing the gcloud CLI.
 
 ## References
 
