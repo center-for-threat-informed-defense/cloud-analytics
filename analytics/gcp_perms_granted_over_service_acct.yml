@@ -13,9 +13,9 @@ logsource:
     methodnamestart:
         gcp.audit.method_name|beginswith: google.iam.admin
     methodsetpolicy:
-        gcp.audit.method_name: SetIAMPolicy
+        gcp.audit.method_name: SetIamPolicy
     selection_resource_type:
-        gcp.audit.resource.type: "service_account"
+        protoPayload.serviceData.policyDelta.bindingDeltas.member: "serviceAccount"
     group_key:
         - "roles/iam.serviceAccountKeyAdmin"
     condition: selection_resource_type and ((1 of method*) or group_key)
