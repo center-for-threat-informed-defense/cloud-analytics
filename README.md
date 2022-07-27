@@ -8,7 +8,7 @@ This Cloud Analytics project researched and developed best practices to help def
 |----------|-------------|
 | [Blueprint Document](/docs/Cloud_Analytics_Development_Blueprint.pdf) | Best practices and lessons learned for developing cloud analytics.​ |
 | [Analytics](/analytics/) | Analytics generated in Sigma format for the project. |
-| [Caldera Emulation Tips](/emulation/) | Documentation on reproducing adversary emulation using Caldera. |
+| [CALDERA Emulation Tips](/emulation/) | Documentation on reproducing adversary emulation using Caldera. |
 | [Sigma Rule Information](/docs/) | Documentation on using Sigma rules in relation to Cloud Analytics. |
 | [Support Resources](/support/) | Resources not part of final deliverable, but potentially useful. |
 
