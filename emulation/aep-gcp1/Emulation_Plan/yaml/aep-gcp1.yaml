@@ -121,6 +121,8 @@
           gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
           gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/#{cloud.resource.role1};
           gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/#{cloud.resource.role2};
+          gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/iam.serviceAccountUser;
+
   input_arguments:
     identity.gcloud.account:
       description: Service account of GCloud account
@@ -153,6 +155,7 @@
       gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
       gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/#{cloud.resource.role1};
       gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/#{cloud.resource.role2};
+      gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/iam.serviceAccountUser;
 
 
 - id: b93d2e74-22b6-4e99-ae8b-9a15406893fc
