@@ -10,17 +10,24 @@ logsource:
   product: google_workspace
   service: google_workspace.admin
 detection:
-    selection:
-        eventService: admin.googleapis.com
+    selection_service_admin:
+        gcp.audit.service_name: admin.googleapis.com
+    selection_service_crm:
+        gcp.audit.service_name: cloudresourcemanager.googleapis.com
     group_name_check1:
         protoPayload.metadata.event.parameter|contains:  'admin'
     group_name_check2:
         protoPayload.metadata.event.parameter|contains:  'prod'
-        group_mod_type1:
+    role_name_check1:
+        protoPayload.serviceData.policyDelta.bindingDeltas|contains: 'admin'
+        protoPayload.serviceData.policyDelta.action|contains: 'ADD'
+    group_mod_type1:
         gcp.audit.method_name: google.admin.AdminService.addGroupMember
     group_mod_type2:
         gcp.audit.method_name: google.admin.AdminService.groupMemberBulkUpload
-    condition: selection and (1 of group_mod_type*) and (1 of group_name_check*)
+    group_mod_type3:
+        gcp.audit.method_name: SetIamPolicy
+    condition: (1 of selection_service*) and (1 of group_mod_type*) and (1 of group_name_check*)
 level: low
 tags:
     - attack.defense_evasion

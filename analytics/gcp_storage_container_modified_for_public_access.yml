@@ -12,7 +12,7 @@ logsource:
 level: medium
 detection:
     selection:
-        eventService: storage.googleapis.com
+        gcp.audit.service_name: storage.googleapis.com
         gcp.audit.method_name:
             - storage.setIamPermissions
         parameter|contains:  '\"action\": \"ADD'
