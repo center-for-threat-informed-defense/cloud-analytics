@@ -10,15 +10,15 @@ logsource:
   product: gcp
   service: gcp.audit
   detection:
-    selection_methodnamestart:
+    methodnamestart:
         gcp.audit.method_name|beginswith: google.iam.admin
-    group_setpolicy:
-        gcp.audit.method_name|endswith: SetIAMPolicy
+    methodsetpolicy:
+        gcp.audit.method_name: SetIAMPolicy
     selection_resource_type:
         gcp.audit.resource.type: "service_account"
     group_key:
-        gcp.audit.method_name|endswith: CreateServiceAccountKey
-    condition: selection_methodnamestart and selection_resource_type and (1 of group_*)
+        - "roles/iam.serviceAccountKeyAdmin"
+    condition: selection_resource_type and ((1 of method*) or group_key)
 level: low
 tags:
     - attack.privilege_escalation
