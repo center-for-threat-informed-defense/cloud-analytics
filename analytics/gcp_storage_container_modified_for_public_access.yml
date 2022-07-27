@@ -12,13 +12,13 @@ logsource:
 level: medium
 detection:
     selection:
-        eventService: storage.googleapis.com
+        gcp.audit.service_name: storage.googleapis.com
         gcp.audit.method_name:
             - storage.setIamPermissions
-        parameter|contains:  '\"action\": \"ADD'
-    selection_allusers:
-        parameter|contains:  'allUsers'
-    condition: selection and selection_allusers
+    keywords:
+        - "ADD"
+        - "allUsers"
+    condition: selection and keywords
 tags:
     - attack.defense_evasion
     - attack.t1578

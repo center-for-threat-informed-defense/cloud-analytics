@@ -6,7 +6,7 @@
 - emulation_plan_details:
     id: ffe6f601-5c08-401b-8f80-417a1be8bd97
     adversary_name: CAP
-    adversary_description: Adversary CAP, or Cloud Analytics Project, is a simulated adversary created to meet the goals of the MITRE Engenuity Cloud Analytics Project. Adversary behavior was based off of TeamTNT, and augmented with additional TTPs to provide a cloud specific advesary. Requires Azure CLI installation.
+    adversary_description: Adversary CAP, or Cloud Analytics Project (Azure), is a simulated adversary created to meet the goals of the MITRE Engenuity Cloud Analytics Project. Requires Azure CLI installation.
     attack_version: 10.0
     format_version: 1.0
 

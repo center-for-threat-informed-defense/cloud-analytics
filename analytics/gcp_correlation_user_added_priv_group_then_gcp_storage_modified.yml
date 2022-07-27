@@ -1,0 +1,19 @@
+action: include
+filename: gworkspace_user_added_priv_group.yml
+---
+action: include
+filename: gcp_storage_container_modified_for_public_access.yml
+---
+action: correlation
+type: temporal
+rule:
+    - gcp_user_added_priv_group
+    - gcp_storage_bucket_modified_public
+group-by:
+    - User
+timespan: 30m
+ordered: true
+aliases:
+  User:
+    gcp_user_added_priv_group: protoPayload.serviceData.policyDelta.bindingDeltas.member
+    gcp_storage_bucket_modified_public: protoPayload.authenticationInfo.principalEmail

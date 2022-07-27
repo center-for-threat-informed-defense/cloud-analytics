@@ -1,0 +1,284 @@
+# aep-gcp1.yaml - CALDERA and Atomic style TTPs for Cloud Analytics project
+# prior to execution, user must run the following at CLI to configure service account for automated usage
+# 1. Setup a service account with appropriate permissions by following the [Google Cloud documentation.](https://cloud.google.com/sdk/gcloud/reference/iam/service-accounts/create)
+# 2. Save [the service account key file](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) as `key.json` within the `caldera-win-agent-1` directory, `cloud-analytics/emulation/caldera-win-agent-1/key.json`.
+#    1. *[Optional]* If you used a different filename other than `key.json`, update within Caldera `FACTS` section, set the`identity.gcloud.key` value just the base filename. For example, if you used `sa.json` instead of `key.json`, set the fact to `sa.json`. Do __not__ include the filepath.
+# 3. Set the `identity.gcloud.account` variable to the Google Cloud service account name, such as `my-svc-account@mydomain.com`.
+
+- emulation_plan_details:
+    id: 6d302c0e-2405-4b79-af9b-4391a27082e6
+    adversary_name: CAPGCP
+    adversary_description: Adversary CAPGCP, or Cloud Analytics Project, Google Cloud Platform, is a simulated adversary created to meet the goals of the MITRE Engenuity Cloud Analytics Project. Requires Google Cloud CLI installation.
+    attack_version: 10.0
+    format_version: 1.0
+
+- id: 404c3fe6-c85f-4c14-a2ad-209d39b45ad7
+  name: Install gcloud powershell
+  description: Install gcloud powershell
+  tactic: defense-evasion
+  technique:
+    attack_id: T1578
+    name: "Modify Cloud Compute Infrastructure"
+  procedure_group: procedure_initial
+  procedure_step: "1.A"
+  platforms:
+    windows:
+      psh,pwsh:
+        command: |
+          if (Get-InstalledModule -Name GoogleCloud -ErrorAction SilentlyContinue) { ; }
+          else { Install-Module -Name GoogleCloud -Force }; ;
+
+  input_arguments:
+    identity.gcloud.account:
+      description: Service account of GCloud account
+      type: string
+      default: unknown
+    identity.gcloud.key:
+      description: Filename of service account key. MUST be in vagrant directory
+      type: string
+      default: key.json
+    identity.gcloud.projectid:
+      description: Project ID for service account
+      type: string
+      default: unknown
+    gcloud.bucket.name:
+      description: Bucket name for Google Cloud usage
+      type: string
+      default: unknown
+
+  executors:
+    - name: powershell
+      command: |
+        if (Get-InstalledModule -Name GoogleCloud -ErrorAction SilentlyContinue) { ; }
+        else { Install-Module -Name GoogleCloud -Force }; ;
+
+# - id: 9b0fb8dc-fea5-4ac6-8ab9-f000210d92d9
+#   name: Install gcloud cli
+#   description: Install gcloud CLI
+#   tactic: defense-evasion
+#   technique:
+#     attack_id: T1578
+#     name: "Modify Cloud Compute Infrastructure"
+#   procedure_group: procedure_initial
+#   procedure_step: "1.B"
+#   platforms:
+#     windows:
+#       psh,pwsh:
+#         command: |
+#           $sdkurl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-394.0.0-windows-x86_64-bundled-python.zip";
+#           $savefile = "$env:Temp\gcloudsdk.zip";
+#           $extractdir = "$env:Temp\gcloudsdk";
+#           $sdkdir = "$extractdir\google-cloud-sdk";
+#           (New-Object Net.WebClient).DownloadFile($sdkurl, $savefile);
+#           Expand-Archive -Path $savefile -DestinationPath $extractdir;
+#           Start-Process -FilePath "$sdkdir\install.bat" -ArgumentList @("-q");
+#           refreshenv.cmd;
+
+#   input_arguments:
+#     identity.gcloud.account:
+#       description: Service account of GCloud account
+#       type: string
+#       default: unknown
+#     identity.gcloud.key:
+#       description: Filename of service account key. MUST be in vagrant directory
+#       type: string
+#       default: key.json
+#     identity.gcloud.projectid:
+#       description: Project ID for service account
+#       type: string
+#       default: unknown
+#     gcloud.bucket.name:
+#       description: Bucket name for Google Cloud usage
+#       type: string
+#       default: unknown
+
+#   executors:
+#     - name: powershell
+#       command: |
+#         $sdkurl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-394.0.0-windows-x86_64-bundled-python.zip";
+#         $savefile = "$env:Temp\gcloudsdk.zip";
+#         $extractdir = "$env:Temp\gcloudsdk";
+#         $sdkdir = "$extractdir\google-cloud-sdk";
+#         (New-Object Net.WebClient).DownloadFile($sdkurl, $savefile);
+#         Expand-Archive -Path $savefile -DestinationPath $extractdir;
+#         Start-Process -FilePath "$sdkdir\install.bat" -ArgumentList @("-q");
+#         refreshenv.cmd;
+
+- id: 48a0a949-34ea-4260-8e6c-ca9b1a029284
+  name: Add user to privileged group
+  description: Add service account to group defined in argument, default compute.admin
+  tactic: persistence
+  technique:
+    attack_id: T1098.003
+    name: "Additional Cloud Roles"
+  cti_source: "https://attack.mitre.org/techniques/T1098/003/"
+  procedure_group: procedure_initial
+  procedure_step: "1.B"
+  platforms:
+    windows:
+      psh,pwsh:
+        command: |
+          gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
+          gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/#{cloud.resource.role1};
+          gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/#{cloud.resource.role2};
+          gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/iam.serviceAccountUser;
+
+  input_arguments:
+    identity.gcloud.account:
+      description: Service account of GCloud account
+      type: string
+      default: unknown
+    identity.gcloud.key:
+      description: Filename of service account key. MUST be in vagrant directory
+      type: string
+      default: key.json
+    identity.gcloud.projectid:
+      description: Project ID for service account
+      type: string
+      default: unknown
+    identity.ssh.keyfile:
+      description: SSH public key to add to GCP. File MUST be in vagrant directory
+      type: string
+      default: gcptestkey.pub
+    cloud.resource.role1:
+      description: Role (1) to add to service account user, should contain word admin in role name, omit roles prefix
+      type: string
+      default: compute.admin
+    cloud.resource.role2:
+      description: Role (2) to add to service account user, should contain word admin in role name, omit roles prefix
+      type: string
+      default: iam.serviceAccountKeyAdmin
+
+  executors:
+  - name: powershell
+    command: |
+      gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
+      gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/#{cloud.resource.role1};
+      gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/#{cloud.resource.role2};
+      gcloud projects add-iam-policy-binding #{identity.gcloud.projectid} --member=serviceAccount:#{identity.gcloud.account} --role=roles/iam.serviceAccountUser;
+
+
+- id: b93d2e74-22b6-4e99-ae8b-9a15406893fc
+  name: Make bucket public
+  description: Authenticate service principal for automation, make bucket public
+  tactic: defense-evasion
+  technique:
+    attack_id: T1578
+    name: "Modify Cloud Compute Infrastructure"
+  procedure_group: procedure_initial
+  procedure_step: "1.C"
+  platforms:
+    windows:
+      psh,pwsh:
+        command: |
+          refreshenv.cmd;
+          gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
+          gsutil iam ch allUsers:objectViewer gs://#{gcloud.bucket.name};
+
+
+  input_arguments:
+    identity.gcloud.account:
+      description: Service account of GCloud account
+      type: string
+      default: unknown
+    identity.gcloud.key:
+      description: Filename of service account key. MUST be in vagrant directory
+      type: string
+      default: key.json
+    identity.gcloud.projectid:
+      description: Project ID for service account
+      type: string
+      default: unknown
+    gcloud.bucket.name:
+      description: Bucket name for Google Cloud usage
+      type: string
+      default: unknown
+
+  executors:
+    - name: powershell
+      command: |
+        refreshenv.cmd;
+        gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
+        gsutil iam ch allUsers:objectViewer gs://#{gcloud.bucket.name};
+
+- id: 7016b537-87eb-4321-8eff-97affe9cd6ba
+  name: Add SSH Key in GCP
+  description: Add SSH key to GCP, by default will use pre-generated key
+  tactic: persistence
+  technique:
+    attack_id: T1098.001
+    name: "External Remote Services"
+  cti_source: "https://attack.mitre.org/techniques/T1098/001/"
+  procedure_group: procedure_initial
+  procedure_step: "2.B"
+  platforms:
+    windows:
+      psh,pwsh:
+        command: |
+          gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
+          gcloud compute project-info add-metadata --metadata-from-file=ssh-keys="C:\vagrant\#{identity.ssh.keyfile}"
+
+  input_arguments:
+    identity.gcloud.account:
+      description: Service account of GCloud account
+      type: string
+      default: unknown
+    identity.gcloud.key:
+      description: Filename of service account key. MUST be in vagrant directory
+      type: string
+      default: key.json
+    identity.gcloud.projectid:
+      description: Project ID for service account
+      type: string
+      default: unknown
+    identity.ssh.keyfile:
+      description: SSH public key to add to GCP. File MUST be in vagrant directory
+      type: string
+      default: gcptestkey.pub
+
+  executors:
+  - name: powershell
+    command: |
+      gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
+      gcloud compute project-info add-metadata --metadata-from-file=ssh-keys="C:\vagrant\#{identity.ssh.keyfile}"
+
+- id: 83f2a41a-dd61-4e90-82fe-385bb335fdce
+  name: Create service account keypair
+  description: Generate keys for service account
+  tactic: privilege-escalation
+  technique:
+    attack_id: T1484.002
+    name: "Domain Trust Modification"
+  cti_source: "https://attack.mitre.org/techniques/T1484/002/"
+  procedure_group: procedure_initial
+  procedure_step: "2.C"
+  platforms:
+    windows:
+      psh,pwsh:
+        command: |
+          gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
+          gcloud iam service-accounts keys create ca-testkey.json --iam-account=#{identity.gcloud.account};
+
+  input_arguments:
+    identity.gcloud.account:
+      description: Service account of GCloud account
+      type: string
+      default: unknown
+    identity.gcloud.key:
+      description: Filename of service account key. MUST be in vagrant directory
+      type: string
+      default: key.json
+    identity.gcloud.projectid:
+      description: Project ID for service account
+      type: string
+      default: unknown
+    identity.ssh.keyfile:
+      description: SSH public key to add to GCP. File MUST be in vagrant directory
+      type: string
+      default: gcptestkey.pub
+
+  executors:
+  - name: powershell
+    command: |
+      gcloud auth activate-service-account --key-file="C:\vagrant\#{identity.gcloud.key}" --project=#{identity.gcloud.projectid};
+      gcloud iam service-accounts keys create ca-testkey.json --iam-account=#{identity.gcloud.account};

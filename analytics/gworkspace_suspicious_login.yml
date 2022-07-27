@@ -11,7 +11,7 @@ logsource:
   service: google_workspace.admin
 detection:
     selection:
-        eventService: admin.googleapis.com
+        gcp.audit.service_name: admin.googleapis.com
         gcp.audit.method_name:
             - google.login.LoginService.loginSuccess
         protoPayload.metadata.event.parameter|contains:  '\"boolValue\": true'
