@@ -1,6 +1,6 @@
 # Cloud Analytics
 
-Cloud Analytics helps defenders detect attacks to their cloud infrastructure by developing behavioral analytics to detect attacks to cloud platforms and a blueprint for how others can create and use cloud analytics effectively.
+This Cloud Analytics project researched and developed best practices to help defenders improve their ability to detect adversary behaviors in today's complex cloud environments. This repository contains behavioral analytics to detect attacks to cloud platforms and a blueprint for how others can create and use cloud analytics effectively.
 
 ## Resources
 
