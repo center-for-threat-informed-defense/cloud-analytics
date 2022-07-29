@@ -1,5 +1,6 @@
 title: Google Storage Bucket Access Modified
 id: 2c89cd0c-4260-41a6-ad5e-500e40b47c72
+name: gcp_storage_bucket_modified_public
 description: Identifies when a previously existing storage container has access control modified to enable public access
 author: Center for Threat-Informed Defense, Michael Butt
 status: experimental

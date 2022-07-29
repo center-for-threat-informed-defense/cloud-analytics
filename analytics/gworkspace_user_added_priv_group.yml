@@ -1,5 +1,6 @@
 title: Workspace User Added To Privileged Group
 id: 2e2a283a-47a1-4811-8754-49243967f379
+name: gcp_user_added_priv_group
 description: Identifies when a user is added to a privileged group
 author: Center for Threat-Informed Defense, Google CSA, Michael Butt
 status: experimental
