@@ -9,9 +9,9 @@ references:
 logsource:
   product: gcp
   service: gcp.audit
-  detection:
+detection:
     methodnamestart:
-        gcp.audit.method_name|beginswith: google.iam.admin
+        gcp.audit.method_name|startswith: google.iam.admin
     methodsetpolicy:
         gcp.audit.method_name: SetIamPolicy
     selection_resource_type:
